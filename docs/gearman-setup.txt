@@ -1,9 +1,10 @@
-Setting up Gearman for Crawl Manager On Debain
-==============================================
+Setting up Gearman for Crawl Manager On Debian
+-----------------------------------------------
 ????
 
+
 Setting up Gearman for Crawl Manager On OSX
-==============================================
+-----------------------------------------------
 
 Install homebrew:
 
@@ -28,11 +29,16 @@ Install gearman php pecl extension:
     http://pecl.php.net/package/gearman
 
    ./configure --with-gearman=/path/to/homebrew
-	make
-	make test
-	make install
+    make
+    make test
+    make install
 
-	add 'extension=gearman.so' to your php.ini
-	
-	run:  php --info | grep "gearman support"
-	it should output "gearman support => enabled"
+    add 'extension=gearman.so' to your php.ini
+    
+    run:  php --info | grep "gearman support"
+    it should output "gearman support => enabled"
+
+
+Configure Gearman for Crawl Manager On OSX
+-----------------------------------------------
+???
