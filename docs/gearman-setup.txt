@@ -1,3 +1,4 @@
+
 Setting up Gearman for Crawl Manager On Debian
 -----------------------------------------------
 ????
@@ -5,6 +6,7 @@ Setting up Gearman for Crawl Manager On Debian
 
 Setting up Gearman for Crawl Manager On OSX
 -----------------------------------------------
+NOTE: Be sure you have the latest XCode and XCode command line tools installed.
 
 Install homebrew:
 
@@ -16,9 +18,8 @@ Install homebrew gearman:
 
 Install pear if needed:
 
-    curl -O http://pear.php.net/go-pear.phar sudo php -d detect_unicode=0 go-pear.phar - See more at:    
-    http://jason.pureconcepts.net/2012/10/install-pear-pecl-mac-os-x/#sthash.meMYqY4A.dpuf
-
+    curl -O http://pear.php.net/go-pear.phar; sudo php -d detect_unicode=0 go-pear.phar 
+    See more at: http://jason.pureconcepts.net/2012/10/install-pear-pecl-mac-os-x/#sthash.meMYqY4A.dpuf
 
 Install homebrew autoconf
 
@@ -26,7 +27,7 @@ Install homebrew autoconf
 
 Install gearman php pecl extension:
 
-    http://pecl.php.net/package/gearman
+    http://pecl.php.net/get/gearman 
 
    ./configure --with-gearman=/path/to/homebrew
     make

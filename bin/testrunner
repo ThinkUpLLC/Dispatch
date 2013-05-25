@@ -1,0 +1,3 @@
+#!/bin/sh
+
+php extlib/PHPUnit/phpunit.phar --colors $@
