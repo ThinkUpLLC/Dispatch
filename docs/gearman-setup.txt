@@ -27,12 +27,14 @@ Install homebrew autoconf
 
 Install gearman php pecl extension:
 
-    http://pecl.php.net/get/gearman 
+    download http://pecl.php.net/get/gearman 
 
-   ./configure --with-gearman=/path/to/homebrew
-    make
-    make test
-    make install
+    untar and cd into the gearman directory, and run: 
+    
+      ./configure --with-gearman=/path/to/homebrew
+       make
+       make test
+       make install
 
     add 'extension=gearman.so' to your php.ini
     
