@@ -30,7 +30,8 @@ Install gearman php pecl extension:
     download http://pecl.php.net/get/gearman 
 
     untar and cd into the gearman directory, and run: 
-    
+
+       phpize
       ./configure --with-gearman=/path/to/homebrew
        make
        make test
