@@ -1,0 +1,13 @@
+php:
+    - "5.3"
+    - "5.4"
+
+before_install:
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq gearman-job-server gearman-dev
+
+branches:
+    only:
+        - /-rc\d+$/
+script:
+    phpunit tests/
