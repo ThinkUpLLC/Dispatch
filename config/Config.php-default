@@ -1,0 +1,34 @@
+<?php
+
+namespace thinkup\config;
+
+class Config {
+
+    private static $config = array(
+        'API_VERSION' => '1.0',
+        'API_AUTH_TOKEN' => '0000000000',
+        'GEARMAN_SERVERS' => '127.0.0.1:4730',
+        'THINKUP_INSTALL_DIR' => '/Users/mark/thinkupcrawl',
+        'PHP' => '/usr/bin/php',
+        'db_host' => '127.0.0.1',
+        'db_user' => 'root',
+        'db_password' => '',
+        'db_name' => 'thinkup_crawl_manager',
+    );
+
+    function _construct() {
+
+    }
+
+    public function get($key) {
+        if(isset(self::$config[$key])) {
+            return self::$config[$key];
+        }
+    }
+
+    public function set($key, $value) {
+        if(isset(self::$config[$key])) {
+            self::$config[$key] = $value;
+        }
+    }
+}

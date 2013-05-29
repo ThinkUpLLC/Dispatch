@@ -1,14 +1,18 @@
+language: php
+
 php:
-    - "5.3"
     - "5.4"
 
 before_install:
-    - sudo apt-get update -qq
-    - sudo apt-get install -qq gearman-job-server gearman-dev
+    - sudo apt-get install python-software-properties
+    - sudo add-apt-repository -y ppa:gearman-developers/ppa
+    - sudo apt-get update
+    - sudo apt-get install -qq gearman-job-server libgearman-dev gearman-tools
+    - sudo apt-get install php-pear
+    - pecl install gearman
+    - make
+    - mysql -e 'create database thinkup_crawl_manager;'
+    - mysql -u root thinkup_crawl_manager < sql/setup.sql
 
-branches:
-    only:
-        - master
-        - /-rc\d+$/
 script:
-    phpunit tests/
+    - phpunit tests/
