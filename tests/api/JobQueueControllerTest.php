@@ -64,5 +64,21 @@ class JobQueueControllerTest extends PHPUnit_Framework_TestCase
         $obj = json_decode($json);
         $this->assertEquals($obj->success, "1 Job(s) Queued");
     }
-    
+
+    public function testValidJsonRequestHighPriority() {
+        // mock the header method in our root controller
+        $queue = $this->getMock('\GearmanClient', array('doHighBackground'));
+        $job = '{"installation_name":"mwilkie","timezone":"America\/Los_Angeles","db_host":"localhost",' . 
+            '"db_name":"thinkup_20120911","db_socket":"\/tmp\/mysql.sock","db_port":"","high_priority":true}';
+        $_POST['jobs'] = '[' . $job . ']';
+        $queue->expects($this->once())
+                 ->method('doHighBackground')
+                 ->with( $this->equalTo('crawl'), $this->equalTo( $job ) );
+
+        $ctl = new \thinkup\api\JobQueueController($queue);
+
+        $json = $ctl->execute();
+        $obj = json_decode($json);
+        $this->assertEquals($obj->success, "1 Job(s) Queued");
+    }
 }

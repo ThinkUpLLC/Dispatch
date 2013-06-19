@@ -57,7 +57,11 @@ class Client extends \thinkup\DispatchParent {
         self::validateJobList($crawl_jobs);
         $count = 0;
         foreach($crawl_jobs as $job) {
-            $this->queue->doBackground("crawl", json_encode($job));
+            if(isset($job['high_priority']) && $job['high_priority'] === true) {
+                $this->queue->doHighBackground("crawl", json_encode($job));
+            } else {
+                $this->queue->doBackground("crawl", json_encode($job));
+            }
             $count++;
         }
         return $count;

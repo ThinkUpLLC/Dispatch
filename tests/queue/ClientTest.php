@@ -161,4 +161,24 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $cnt = $client->queueCrawlJobs(array($job1, $job2));
         $this->assertEquals($cnt, 2);
     }
+
+
+    /**
+     *
+     */
+    public function testAddHighPriorityJob() {
+
+        $job = array("installation_name" => "mwilkie","timezone" => "America/Los_Angeles",
+        "db_host" => "localhost","db_name" => "thinkup_20120911","db_socket" => "/tmp/mysql.sock","db_port" => "", "high_priority" => true);
+
+        // mock the header method in our root controller
+        $queue = $this->getMock('\GearmanClient', array('doHighBackground'));
+        $queue->expects($this->once())
+                 ->method('doHighBackground')
+                 ->with( $this->equalTo('crawl'), $this->equalTo( json_encode($job) ) );
+
+        $client = new \thinkup\queue\Client($queue);
+        $cnt = $client->queueCrawlJobs(array($job));
+        $this->assertEquals($cnt, 1);
+    }
 }
