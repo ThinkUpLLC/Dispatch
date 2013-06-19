@@ -65,7 +65,7 @@ class Worker extends \thinkup\DispatchParent {
         $worker->addFunction("crawl", "thinkup\queue\workerCrawl");
 
         while(1) {
-            print "Waiting for job...\n";
+            LOG::get()->info("Waiting for job");
             $ret = $worker->work();
             if ($worker->returnCode() != GEARMAN_SUCCESS) {
                 break;
@@ -97,7 +97,7 @@ class Worker extends \thinkup\DispatchParent {
         $return_value = 0;
         $cmdout = exec($cmd, $out, $return_value);
         if($return_value > 0) {
-            $output = $cmd . ' Faileds: ' . $return_value;
+            $output = $cmd . ' Failed: ' . $return_value;
         } else {
             foreach($out as $line) {
                 $output .= $line;
