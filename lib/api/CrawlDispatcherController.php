@@ -99,7 +99,8 @@ class CrawlDispatcherController extends \thinkup\DispatchParent {
             $output = json_encode($auth_status);
             LOG::get()->debug('Invalid Auth');
         } else {
-            $output = json_encode($this->auth_execute());
+            $obj = $this->auth_execute();
+            $output = json_encode($obj);
         }
         return $output;
     }

@@ -1,22 +1,18 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../lib/DispatchParent.php';
+require_once dirname(__FILE__) . '/APIParentTest.php';
 
-class CrawlDispatcherController extends PHPUnit_Framework_TestCase
+class CrawlDispatcherController extends APIParentTest
 {
-    protected function setUp()
+    public function setUp()
     {
-        /* include DispatchParent */
-        require_once substr(dirname(__FILE__), 0, -10) . '/lib/DispatchParent.php';
-        \thinkup\DispatchParent::init();
-        
         parent::setUp();
-    }
-
-    protected function tearDown()
-    {
         unset($_POST);
         unset($_GET);
+    }
+
+    public function tearDown()
+    {
         parent::tearDown();
     }
 

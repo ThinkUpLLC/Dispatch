@@ -34,7 +34,7 @@ class DispatchParent {
 
     private $ext_lib_root = null;
 
-    protected static $config = null;
+    public static $config = null;
 
     private static $init = false;
     

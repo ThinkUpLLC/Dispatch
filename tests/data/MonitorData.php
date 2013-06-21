@@ -2,7 +2,7 @@
 
 class MonitorData {
 
-    var $data = array (
+    static $data = array (
       'operations' => 
       array (
         'crawl' => 
@@ -39,8 +39,8 @@ class MonitorData {
       ),
     );
 
-    public function getMonitorData() {
-        return $data;
+    public static function getMonitorData() {
+        return self::$data;
     }
 
 }
