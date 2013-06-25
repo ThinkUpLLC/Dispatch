@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8"/>
+        <title>Your First AngularJS App</title>
+
+        <!-- The main CSS file -->
+        <link href="/css/main.css" rel='stylesheet' />
+
+        <script src="/js/angular/angular.js"></script>
+        <script src="/js/lib/app.js"></script>
+        <script src="/js/lib/controllers.js"></script>
+
+
+    </head>
+
+    <body>
+
+        <div id="main" ng-app ng-controller="GearmnaStatusCtrl">
+            <h1>Gearman Status</h1>
+            <ul>
+                <li>Connected Workers: {{gearman_status.operations.crawl.connectedWorkers}}</li>
+                <li>Running Workers: {{gearman_status.operations.crawl.running}}</li>
+                <li>Gearman Status: {{gearman_ok}}</li>
+        </div>
+
+
+
+    </body>
+</html>

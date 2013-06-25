@@ -8,5 +8,6 @@ require_once substr(dirname(__FILE__), 0, -4) . '/lib/DispatchParent.php';
  
 $job_queue_ctl = new \thinkup\api\JobQueueController();
 
+header('Content-type: application/json');
 print $job_queue_ctl->execute();
 

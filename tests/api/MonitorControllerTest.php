@@ -14,7 +14,7 @@ class MonitorControllerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
     }
 
-    public function testDefaultActionGetStatus() {
+    public function testDefaultActionGetStatusOK() {
         // mock Queue Monitor getStatus()
         $monitor = $this->getMock('\thinkup\queue\Monitor', array('getStatus'));
         $monitor->expects($this->once())
@@ -28,7 +28,31 @@ class MonitorControllerTest extends PHPUnit_Framework_TestCase
         //var_dump($obj);
         $this->assertArrayHasKey('operations', $obj['gearman_status']);
         $this->assertArrayHasKey('connections', $obj['gearman_status']);
-        
+        $this->assertArrayHasKey('crawl', $obj['gearman_status']['operations']);
+        $this->assertEquals(true, $obj['gearman_ok']);
+        $cnt = thinkup\api\MonitorController::$config->get('CONNECTED_WORKERS');
+        $this->assertEquals($cnt, $obj['workers_wanted']);
+    }
+
+    public function testDefaultActionGetStatusNotOK() {
+        // mock Queue Monitor getStatus()
+        $monitor = $this->getMock('\thinkup\queue\Monitor', array('getStatus'));
+        $monitor->expects($this->once())
+                 ->method('getStatus')
+                 ->will($this->returnValue( MonitorData::getMonitorData() ));
+
+        $monitor_ctl = new thinkup\api\MonitorController($monitor);
+
+        $cnt = thinkup\api\MonitorController::$config->get('CONNECTED_WORKERS');
+        thinkup\api\MonitorController::$config->set('CONNECTED_WORKERS', $cnt + 1);
+        $json = $monitor_ctl->execute();;
+        thinkup\api\MonitorController::$config->set('CONNECTED_WORKERS', $cnt); // reset
+        $obj = json_decode($json, true);
+        $this->assertNotNull($obj);
+        $this->assertArrayHasKey('operations', $obj['gearman_status']);
+        $this->assertArrayHasKey('connections', $obj['gearman_status']);
+        $this->assertArrayHasKey('crawl', $obj['gearman_status']['operations']);
+        $this->assertEquals(false, $obj['gearman_ok']);
     }
 
     public function testNagiosStatusGood() {
@@ -41,7 +65,7 @@ class MonitorControllerTest extends PHPUnit_Framework_TestCase
 
          $monitor_ctl = new thinkup\api\MonitorController($monitor);
          $_GET['nagios_check'] = 1;
-        
+
         $json = $monitor_ctl->execute();
         $this->assertNotNull($json);
         $resonse_data = json_decode($json, true);
@@ -64,10 +88,10 @@ class MonitorControllerTest extends PHPUnit_Framework_TestCase
         $cnt = thinkup\api\MonitorController::$config->get('CONNECTED_WORKERS');
         thinkup\api\MonitorController::$config->set('CONNECTED_WORKERS', $cnt + 1);
         $json = $monitor_ctl->execute();
-        thinkup\api\MonitorController::$config->set('CONNECTED_WORKERS', $cnt); // reset
+        thinkup\api\MonitorController::$config->set('CONNECTED_WORKERS', $cnt - 1); // reset
         $this->assertNotNull($json);
         $resonse_data = json_decode($json, true);
-        $this->assertEquals('2 running worker(s) not found - NOT OK', $resonse_data['status']);
+        $this->assertEquals('2 running worker(s) found - NOT OK', $resonse_data['status']);
 
     }
 

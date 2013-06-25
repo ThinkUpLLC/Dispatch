@@ -52,9 +52,22 @@ class MonitorController extends \thinkup\api\CrawlDispatcherController {
      */
     public function auth_execute() {
         if(isset($_GET['nagios_check']) && $_GET['nagios_check'] == 1) {
-            return $this->nagiosCheck();
+            $workers_wanted = $this->config('CONNECTED_WORKERS');
+            if($this->nagiosCheck($this->getStatus()) == true) {
+                return array('status' => $workers_wanted . ' running worker(s) - OK');
+            } else {
+                return array('status' => $workers_wanted . ' running worker(s) found - NOT OK');
+            }
         } else {
-            return $this->getStatus();
+            $gearman_status = $this->getStatus();
+            $status_response = array('gearman_status'=> $gearman_status);
+            if($this->nagiosCheck($gearman_status) == true) {
+                $status_response['gearman_ok'] = true;
+            } else {
+                $status_response['gearman_ok'] = false;
+            }
+            $status_response['workers_wanted'] = $this->config('CONNECTED_WORKERS');
+            return $status_response;
         }
 
     }
@@ -65,15 +78,14 @@ class MonitorController extends \thinkup\api\CrawlDispatcherController {
      */
      public function getStatus() {
          $gearman_status = $this->monitor->getStatus();
-         return array('gearman_status'=> $gearman_status);
+         return $gearman_status;
      }
 
     /**
      * check running workers for nagios
      * @return Array a nagios status hash
      */
-     public function nagiosCheck() {
-         $status =  $this->monitor->getStatus();
+     public function nagiosCheck($status) {
          $workers_wanted = $this->config('CONNECTED_WORKERS');
          if(isset($status) && isset($status['operations'])) {
              if(isset($status['operations']['crawl'])) {
@@ -81,13 +93,12 @@ class MonitorController extends \thinkup\api\CrawlDispatcherController {
                  if(isset($crawl['connectedWorkers'])) {
                      if($crawl['connectedWorkers'] == $workers_wanted) {
                          // status ok!
-                         return array('status' => $workers_wanted . ' running worker(s) - OK');
+                         return true;
                      }
                  }
              }
          }
          // status not ok
-         return array('status' => $workers_wanted . ' running worker(s) not found - NOT OK');
+         return false;
      }
-
 }
