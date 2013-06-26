@@ -60,11 +60,16 @@ class MonitorController extends \thinkup\api\CrawlDispatcherController {
             }
         } else {
             $gearman_status = $this->getStatus();
-            $status_response = array('gearman_status'=> $gearman_status);
+            $status_response = array();
+            //'gearman_status'=> $gearman_status
             if($this->nagiosCheck($gearman_status) == true) {
                 $status_response['gearman_ok'] = true;
+                $status_response['gearman_status'] = $gearman_status;
             } else {
                 $status_response['gearman_ok'] = false;
+                if($gearman_status) {
+                    $status_response['gearman_status'] = $gearman_status;
+                }
             }
             $status_response['workers_wanted'] = $this->config('CONNECTED_WORKERS');
             return $status_response;

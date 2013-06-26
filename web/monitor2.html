@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Queue Status/Monitor</title>
+</head>
+<body>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+  <script src="/lib/underscore-1.4.4.js"></script>
+  <script src="/lib/backbone-1.0.js"></script>
+
+<div id="status-container"></div>
+
+<script>
+
+    (function($) {
+
+        var GearmanStatus = Backbone.Model.extend({
+            defaults: function() {
+                return {
+                    author: '',
+                    status: ''
+                }
+            }
+        });

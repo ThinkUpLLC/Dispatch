@@ -1,31 +1,114 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <meta charset="utf-8">
+  <title>Queue Status/Monitor</title>
+</head>
+<body>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+  <script src="/lib/underscore-1.4.4.js"></script>
+  <script src="/lib/backbone-1.0.js"></script>
 
-    <head>
-        <meta charset="utf-8"/>
-        <title>Your First AngularJS App</title>
+<form id="new-tweets" onsubmit="false;">
+    <label>Author:</label><input id="author-name" name="author-name" type="text" />
+    <label>Status:</label><input id="status-update" name="status-update]" type="text" />
+    <button>Post Button</button>
+</form>
+<hr />
+<div id="tweets-container"></div>
 
-        <!-- The main CSS file -->
-        <link href="/css/main.css" rel='stylesheet' />
+<script>
 
-        <script src="/js/angular/angular.js"></script>
-        <script src="/js/lib/app.js"></script>
-        <script src="/js/lib/controllers.js"></script>
+    (function($) {
 
+        var Tweet = Backbone.Model.extend({
+            defaults: function() {
+                return {
+                    author: '',
+                    status: ''
+                }
+            }
+        });
 
-    </head>
+        var TweetList = Backbone.Collection.extend({
+            model: Tweet
+        });
+        var tweets = new TweetList();
 
-    <body>
+        var TweetView = Backbone.View.extend( {
+            model: new Tweet(),
+            tagName: 'div',
+            events: {
+              'click .edit': 'edit',
+              'click .delete': 'delete',  
+              'blur .status': 'close',
+              'keypress .status': 'onEnterUpdate'
+            },
+            edit: function(ev) {
+                ev.preventDefault();
+                this.$('.status').attr('contenteditable', true).focus();
+            },
+            onEnterUpdate: function(ev) {
+                var self = this;
+                if(ev.keyCode === 13) {
+                    this.close();
+                    _.delay( function() { self.$('status').blur() }, 100 );
+                }
+            },
+            delete: function(ev) {
+                
+            },
+            close: function() {
+                var status = this.$('.status').text();
+                this.model.set('status', status);
+                this.$('status').removeAttr('contenteditable');
+            },
+            initialize: function() {
+                this.template = _.template($('#tweet-template').html());
+            },
+            render: function() {
+                this.$el.html(this.template(this.model.toJSON()));
+                return this;
+            }
+        });
+        
+        var TweetsView = Backbone.View.extend( {
+            model: tweets,
+            el: $('#tweets-container'),
+            initialize: function() {
+                this.model.on('add', this.render, this);
+            },
+            render: function() {
+                var self = this;
+                self.$el.html('');
+                _.each(this.model.toArray(), function(tweet, i) {
+                    self.$el.append((new TweetView({model: tweet})).render().$el);
+                });
+                return this;
+            }
+        });
 
-        <div id="main" ng-app ng-controller="GearmnaStatusCtrl">
-            <h1>Gearman Status</h1>
-            <ul>
-                <li>Connected Workers: {{gearman_status.operations.crawl.connectedWorkers}}</li>
-                <li>Running Workers: {{gearman_status.operations.crawl.running}}</li>
-                <li>Gearman Status: {{gearman_ok}}</li>
-        </div>
+        $(document).ready(function() {
+            $('#new-tweets').submit( function(ev) {
+                tweet1 = new Tweet( {author: $('#author-name').val(), status: $('#status-update').val() });
+                tweets.add(tweet1);
+                //console.log(tweets.toJSON());
+                return false;
+            });
+            var appView = new TweetsView();
+        });
+        
+    })(jQuery);
+    
+</script>
 
+<!-- templates -->
+<script type="text/template" id="tweet-template">
+    <span class="author"><%= author %></span>:
+    <span class="status"><%= status %></span>
+    <a href="#" class="edit">[Edit]</a>
+    <a href="#" class="delete">[Delete]</a>
+</script>
 
-
-    </body>
+</body>
 </html>
