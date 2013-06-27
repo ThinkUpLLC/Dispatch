@@ -3,23 +3,87 @@
 <head>
   <meta charset="utf-8">
   <title>Queue Status/Monitor</title>
-</head>
-<body>
+
+  <style type="text/css">
+      .error { color: red}
+  </style>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
   <script src="/lib/underscore-1.4.4.js"></script>
   <script src="/lib/backbone-1.0.js"></script>
 
-<div id="status-container"></div>
+</head>
+<body>
 
-<script>
+  
+<div id="error-container"></div>
+<div id="queue-status"></div>
+
+<!-- our queue status views -->
+<script src="/js/views/QueueStatusViews.js" type="text/javascript"></script>
+
+<!-- our queue status models  -->
+<script src="/js/models/QueueStatusModels.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    var auth_token = '0000000000';
 
     (function($) {
 
-        var GearmanStatus = Backbone.Model.extend({
-            defaults: function() {
-                return {
-                    author: '',
-                    status: ''
+        /**
+         * Loads our Queue status model and proper view
+         */
+        var queue_status = new QueueStatus();
+        queue_status.fetch( { 
+            success: function (queue_status) { 
+                if(queue_status.get('gearman_ok') == false) {
+                    if(! queue_status.get('gearman_status')) {
+                        queue_error_view = new QueueErrorView();
+                        queue_error_view.render();
+                    } else {
+                        worker_error_view = new WorkerErrorView();
+                        if(! queue_status.get('gearman_status').operations) {
+                            worker_error_view.render(0, queue_status.get('workers_wanted'));
+                        } else {
+                            workers = 0;
+                            if(queue_status.get('gearman_status').operations.crawl) {
+                               workers = queue_status.get('gearman_status').operations.crawl.connectedWorkers;
+                            }
+                            worker_error_view.render(workers, queue_status.get('workers_wanted'));
+                        }
+                    }
+                } else {
+                    workers = queue_status.get('gearman_status').operations.crawl.connectedWorkers;
+                    running = queue_status.get('gearman_status').operations.crawl.running;
+                    queue_ok_view = new QueueOKView();
+                    queue_ok_view.render(workers, running);
                 }
-            }
-        });
+            } 
+        } );
+
+
+    })(jQuery);
+
+</script>
+
+<!-- queue status templates -->
+<script type="text/template" id="request-fail">
+    <span class="error">We are unable to process queue status request</span>
+</script>
+
+<script type="text/template" id="queue-fail">
+    <span class="error">The Dispatch Queue does not appear to be running</span>
+</script>
+
+<script type="text/template" id="worker-fail">
+    <span class="error">There are not enough Dispatch Workers running. Currently running '<%= running %>', and should be running '<%= wanted %>'</span>
+</script>
+
+<script type="text/template" id="queue-ok">
+    <span>Queue Services are Up</span>
+    <ul>
+    <li>Connected Workers: <%= workers %></li>
+    <li>Workers Running: <%= running %></li>
+</script>
+
+</body>
+</html>
