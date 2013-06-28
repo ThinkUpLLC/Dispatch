@@ -14,39 +14,6 @@ class ModelTest extends PHPUnit_Extensions_Database_TestCase
         return $this->createDefaultDBConnection( \thinkup\model\PDODAO::$PDO );        
     }
 
-    /**
-     * our fixture builder
-     */
-    public function getDataSet() {
-
-        $date_10_ago = date( 'Y-m-d H:i:s', time() - 10 );
-        $date_20_ago = date( 'Y-m-d H:i:s', time() - 20 ); 
-        $date_30_ago = date( 'Y-m-d H:i:s', time() - 30 ); 
-        $date_40_ago = date( 'Y-m-d H:i:s', time() - 40 ); 
-        $date_50_ago = date( 'Y-m-d H:i:s', time() - 60 ); 
-        $date_60_ago = date( 'Y-m-d H:i:s', time() - 60 ); 
-        $date_160_ago = date( 'Y-m-d H:i:s', time() - 160 );
-        $date_300_ago = date( 'Y-m-d H:i:s', time() - 300 );
-
-        return new CrawlFixtureDataSet(array(
-            // our crawl status inserts
-            'crawl_status' => array(
-                // 140 second successfull run
-                array('id' => 1, 'install_name' => 'test 1', 'crawl_time' => 140, 'crawl_start' => $date_300_ago, 'crawl_finish' => $date_160_ago, 'crawl_status' => 1),
-                // 100 second bad run
-                array('id' => 2, 'install_name' => 'test 1', 'crawl_time' => 100, 'crawl_start' => $date_160_ago, 'crawl_finish' => $date_60_ago, 'crawl_status' => 0),
-                // 10 second good run second install
-                array('id' => 3, 'install_name' => 'test 2', 'crawl_time' => 10, 'crawl_start' => $date_50_ago, 'crawl_finish' => $date_60_ago, 'crawl_status' => 1),
-                // 10 second good run first install
-                array('id' => 4, 'install_name' => 'test 1', 'crawl_time' => 10, 'crawl_start' => $date_50_ago, 'crawl_finish' => $date_60_ago, 'crawl_status' => 1),
-                // 10 second good run second install
-                array('id' => 5, 'install_name' => 'test 2', 'crawl_time' => 10, 'crawl_start' => $date_40_ago, 'crawl_finish' => $date_40_ago, 'crawl_status' => 1),
-                // 20 second good run first install
-                array('id' => 6, 'install_name' => 'test 1', 'crawl_time' => 20, 'crawl_start' => $date_10_ago, 'crawl_finish' => $date_30_ago, 'crawl_status' => 1),
-            )
-        ));
-    }
-
     public static function setUpBeforeClass()
     {
         $cmo = new \thinkup\DispatchParent();
@@ -88,5 +55,46 @@ class ModelTest extends PHPUnit_Extensions_Database_TestCase
             //echo "truncate table $table\n";
             $this->dao->execute("truncate table $table");
         }
+    }
+
+
+    /**
+     * our fixture builder
+     */
+    public function getDataSet() {
+
+        $date_10_ago = date( 'Y-m-d H:i:s', time() - 10 );
+        $date_20_ago = date( 'Y-m-d H:i:s', time() - 20 ); 
+        $date_30_ago = date( 'Y-m-d H:i:s', time() - 30 ); 
+        $date_40_ago = date( 'Y-m-d H:i:s', time() - 40 ); 
+        $date_50_ago = date( 'Y-m-d H:i:s', time() - 60 ); 
+        $date_60_ago = date( 'Y-m-d H:i:s', time() - 60 ); 
+        $date_160_ago = date( 'Y-m-d H:i:s', time() - 160 );
+        $date_300_ago = date( 'Y-m-d H:i:s', time() - 300 );
+
+        return new CrawlFixtureDataSet(array(
+            // our crawl status inserts
+            'crawl_status' => array(
+                // 140 second successfull run
+                array('id' => 1, 'install_name' => 'test 1', 'crawl_time' => 140, 'crawl_start' => $date_300_ago, 'crawl_finish' => $date_160_ago, 'crawl_status' => 1),
+                // 100 second bad run
+                array('id' => 2, 'install_name' => 'test 1', 'crawl_time' => 100, 'crawl_start' => $date_160_ago, 'crawl_finish' => $date_60_ago, 'crawl_status' => 0),
+                // 10 second good run second install
+                array('id' => 3, 'install_name' => 'test 2', 'crawl_time' => 10, 'crawl_start' => $date_50_ago, 'crawl_finish' => $date_60_ago, 'crawl_status' => 1),
+                // 10 second good run first install
+                array('id' => 4, 'install_name' => 'test 1', 'crawl_time' => 10, 'crawl_start' => $date_50_ago, 'crawl_finish' => $date_60_ago, 'crawl_status' => 1),
+                // 10 second good run second install
+                array('id' => 5, 'install_name' => 'test 2', 'crawl_time' => 10, 'crawl_start' => $date_40_ago, 'crawl_finish' => $date_40_ago, 'crawl_status' => 1),
+                // 20 second good run first install
+                array('id' => 6, 'install_name' => 'test 1', 'crawl_time' => 20, 'crawl_start' => $date_10_ago, 'crawl_finish' => $date_30_ago, 'crawl_status' => 1),
+            ),
+
+            // our crawl log array
+            'crawl_log' => array(
+              array('id' => 1, 'crawl_status_id' => 1, 'crawl_log' => 'crawl log id 1'),
+              array('id' => 2, 'crawl_status_id' => 2, 'crawl_log' => 'crawl log id 2'),
+              array('id' => 3, 'crawl_status_id' => 3, 'crawl_log' => 'crawl log id 3'),
+            ),
+        ));
     }
 }

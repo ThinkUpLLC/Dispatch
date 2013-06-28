@@ -238,6 +238,24 @@ class CrawlStatsDAOTest extends ModelTest
         $this->assertEquals(5, $data[1]['id']);
     }
 
+
+    /**
+     * test fetching crawl data
+     */
+    public function testGetCrawlLog() {
+        $stats_dao = new \thinkup\model\CrawlStatsDAO();
+        $log = $stats_dao->getCrawlLog(1);
+        $this->assertEquals(1, $log['id']);
+        $this->assertEquals(1, $log['crawl_status_id']);
+        $this->assertEquals('crawl log id 1', $log['crawl_log']);
+
+        $log = $stats_dao->getCrawlLog(3);
+        $this->assertEquals(3, $log['id']);
+        $this->assertEquals(3, $log['crawl_status_id']);
+        $this->assertEquals('crawl log id 3', $log['crawl_log']);
+        
+    }
+    
 }
 
 

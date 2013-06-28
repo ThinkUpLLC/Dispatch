@@ -42,9 +42,9 @@ class WorkerTest extends ModelTest
         $stmt = \thinkup\model\CrawlStatsDAO::$PDO->query( "select id, install_name, " .
         "crawl_time, unix_timestamp(crawl_start) as crawl_start, " .
         "unix_timestamp(crawl_finish) as crawl_finish, crawl_status " .
-        "from crawl_status");
+        "from crawl_status order by id desc");
         $data = $stmt->fetch();
-        $this->assertEquals($data["install_name"], 'test 1');
+        $this->assertEquals($data["install_name"], 'mwilkie');
         $this->assertGreaterThanOrEqual(0, $data["crawl_time"]);
         $almost_now = time() - 400;
         $this->assertGreaterThan($almost_now, $data["crawl_start"]);
@@ -53,8 +53,6 @@ class WorkerTest extends ModelTest
         $this->assertGreaterThan(0, $data["crawl_status"]);
         $stmt = \thinkup\model\CrawlStatsDAO::$PDO->query( "select * from crawl_log where crawl_status_id = " . $data['id']);
         $data = $stmt->fetch();
-        $this->markTestSkipped("need to flesh out crawl log fixture");
-        
         $this->assertRegExp('/cat.*Failed/', $data['crawl_log']);
     }
 
@@ -67,20 +65,17 @@ class WorkerTest extends ModelTest
         $stmt = \thinkup\model\CrawlStatsDAO::$PDO->query( "select id, install_name, " .
         "crawl_time, unix_timestamp(crawl_start) as crawl_start, " .
         "unix_timestamp(crawl_finish) as crawl_finish, crawl_status " .
-        "from crawl_status");
+        "from crawl_status order by id desc");
         $data = $stmt->fetch();
-        $this->assertEquals($data["install_name"], 'test 1');
+        $this->assertEquals($data["install_name"], 'mwilkie');
         $this->assertGreaterThanOrEqual(0, $data["crawl_time"]);
         $almost_now = time() - 400;
         $this->assertGreaterThan($almost_now, $data["crawl_start"]);
         $this->assertGreaterThan($almost_now, $data["crawl_finish"]);
         $this->assertGreaterThanOrEqual($data["crawl_time"], $data["crawl_finish"]);
-        $this->assertEquals(1, $data["crawl_status"]);
+        $this->assertEquals(0, $data["crawl_status"]);
         $stmt = \thinkup\model\CrawlStatsDAO::$PDO->query( "select * from crawl_log where crawl_status_id = " . $data['id']);
         $data = $stmt->fetch();
-        
-        $this->markTestSkipped("need to flesh out crawl log fixture");
-        
         $this->assertRegExp('/happy test/', $data['crawl_log']);
     }
 }

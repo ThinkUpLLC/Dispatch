@@ -115,4 +115,18 @@ class CrawlStatsDAO extends \thinkup\model\PDODAO {
          $stats = $this->getDataRowsAsArrays($sth);
          return $stats;
       }
+
+      /**
+       * get crawl stats
+       * @param String Optional install name
+       * @return Array - a hash of crawl data - last 200 records
+       */
+       public function getCrawlLog($crawl_status_id) {
+          $sql = "select id, crawl_status_id, crawl_log from crawl_log where crawl_status_id = :crawl_status_id";
+          $binds = array(':crawl_status_id' => $crawl_status_id);
+          $sth = $this->execute($sql, $binds);
+          $log = $this->getDataRowAsArray($sth);
+          return $log;
+       }
+
 }
