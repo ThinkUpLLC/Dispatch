@@ -2,16 +2,22 @@
 
 require_once dirname(__FILE__) . '/../../lib/DispatchParent.php';
 require_once dirname(__FILE__) . '/../data/MonitorData.php';
+require_once dirname(__FILE__) . '/../model/CrawlFixtureDataSet.php';
+require_once dirname(__FILE__) . '/../model/ModelTest.php';
 
-class MonitorControllerTest extends PHPUnit_Framework_TestCase
+class MonitorControllerTest extends Modeltest
 {
-    protected function setUp()
+    public function setUp()
     {
         /* include DispatchParent */
         require_once substr(dirname(__FILE__), 0, -10) . '/lib/DispatchParent.php';
         \thinkup\DispatchParent::init();
         $_POST['auth_token'] = \thinkup\DispatchParent::config('API_AUTH_TOKEN');        
         parent::setUp();
+    }
+
+    public function tearDown() {
+        parent::tearDown();
     }
 
     public function testDefaultActionGetStatusOK() {
@@ -95,5 +101,108 @@ class MonitorControllerTest extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testGetCrawlStatus() {
+
+        // mock Queue Monitor getStatus()
+        $monitor = $this->getMock('\thinkup\queue\Monitor', array('getStatus'));
+
+        $monitor->expects($this->any())
+                 ->method('getStatus')
+                 ->will($this->returnValue( MonitorData::getMonitorData() ));
+
+        $monitor_ctl = new thinkup\api\MonitorController($monitor);
+
+        $json = $monitor_ctl->execute();
+        $this->assertNotNull($json);
+        $resonse_data = json_decode($json, true); 
+        $this->assertEquals(2, sizeof($resonse_data['crawl_status']));
+        $this->assertEquals(1, $resonse_data['crawl_status'][0]['count']);
+        $this->assertEquals(5, $resonse_data['crawl_status'][1]['count']);
+
+        // filter by install name
+        $_GET['install_name'] = 'test 1';
+        $json = $monitor_ctl->execute();
+        $this->assertNotNull($json);
+        $resonse_data = json_decode($json, true); 
+        $this->assertEquals(2, sizeof($resonse_data['crawl_status']));
+        $this->assertEquals(1, $resonse_data['crawl_status'][0]['count']);
+        $this->assertEquals(3, $resonse_data['crawl_status'][1]['count']);
+
+        $_GET['install_name'] = 'test 2';
+        $json = $monitor_ctl->execute();
+        $this->assertNotNull($json);
+        $resonse_data = json_decode($json, true); 
+        $this->assertEquals(1, sizeof($resonse_data['crawl_status']));
+        $this->assertEquals(2, $resonse_data['crawl_status'][0]['count']);
+
+        $_GET['install_name'] = 'test 3'; // bad install name
+        $json = $monitor_ctl->execute();
+        $this->assertNotNull($json);
+        $resonse_data = json_decode($json, true); 
+        $this->assertEquals(0, sizeof($resonse_data['crawl_status']));
+    }
+
+    public function testGetCrawlData() {
+        
+        // mock Queue Monitor getStatus()
+        $monitor = $this->getMock('\thinkup\queue\Monitor', array('getStatus'));
+        
+        $monitor->expects($this->any())
+                 ->method('getStatus')
+                 ->will($this->returnValue( MonitorData::getMonitorData() ));
+
+        $monitor_ctl = new thinkup\api\MonitorController($monitor);
+
+        $json = $monitor_ctl->execute();
+        $this->assertNotNull($json);
+        $resonse_data = json_decode($json, true); 
+        $this->assertEquals(6, sizeof($resonse_data['crawl_data']));
+        $data = $resonse_data['crawl_data'];
+        $this->assertEquals(6, sizeof($data));
+        $this->assertEquals('test 1', $data[0]['install_name']);
+        $this->assertEquals(1, $data[0]['id']);
+        $this->assertEquals(1, $data[0]['crawl_status']);
+        $this->assertEquals(140, $data[0]['crawl_time']);
+        $this->assertEquals('test 2', $data[2]['install_name']);
+        $this->assertEquals(3, $data[2]['id']);
+        
+        // filter by install name
+        $_GET['install_name'] = 'test 1';
+        // for test 1 install
+        $json = $monitor_ctl->execute();
+        $this->assertNotNull($json);
+        $resonse_data = json_decode($json, true); 
+        $data = $resonse_data['crawl_data'];
+        $this->assertEquals(4, sizeof($data));
+        $this->assertEquals('test 1', $data[0]['install_name']);
+        $this->assertEquals(1, $data[0]['id']);
+        $this->assertEquals(1, $data[0]['crawl_status']);
+        $this->assertEquals(140, $data[0]['crawl_time']);
+        $this->assertEquals('test 1', $data[2]['install_name']);
+        $this->assertEquals(4, $data[2]['id']);
+
+        // for test 2 install
+        $_GET['install_name'] = 'test 2';
+        $json = $monitor_ctl->execute();
+        $this->assertNotNull($json);
+        $resonse_data = json_decode($json, true); 
+        $data = $resonse_data['crawl_data'];
+        $this->assertEquals(2, sizeof($data));
+        $this->assertEquals('test 2', $data[0]['install_name']);
+        $this->assertEquals(3, $data[0]['id']);
+        $this->assertEquals(1, $data[0]['crawl_status']);
+        $this->assertEquals(10, $data[0]['crawl_time']);
+        $this->assertEquals('test 2', $data[1]['install_name']);
+        $this->assertEquals(5, $data[1]['id']);
+
+        // for test 3 install bad install name
+        $_GET['install_name'] = 'test 3';
+        $json = $monitor_ctl->execute();
+        $this->assertNotNull($json);
+        $resonse_data = json_decode($json, true); 
+        $data = $resonse_data['crawl_data'];
+        $this->assertEquals(0, sizeof($data));
+
+    }
 
 }

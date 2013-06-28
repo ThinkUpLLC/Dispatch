@@ -156,7 +156,7 @@ class PDODAO  extends \thinkup\DispatchParent {
      * @return array numbered keys, with objects
      */
     protected final function getDataRowAsObject($ps, $obj){
-        $ps->setFetchMode(PDO::FETCH_CLASS,$obj);
+        $ps->setFetchMode(\PDO::FETCH_CLASS,$obj);
         $row = $this->fetchAndClose($ps);
         if(!$row){
             $row = null;
@@ -170,7 +170,7 @@ class PDODAO  extends \thinkup\DispatchParent {
      * @return array named keys
      */
     protected final function getDataRowAsArray($ps){
-        $ps->setFetchMode(PDO::FETCH_ASSOC);
+        $ps->setFetchMode(\PDO::FETCH_ASSOC);
         $row = $this->fetchAndClose($ps);
         if(!$row){
             $row = null;
@@ -185,7 +185,7 @@ class PDODAO  extends \thinkup\DispatchParent {
      * @return array numbered keys, with Objects
      */
     protected final function getDataRowsAsObjects($ps, $obj){
-        $ps->setFetchMode(PDO::FETCH_CLASS,$obj);
+        $ps->setFetchMode(\PDO::FETCH_CLASS,$obj);
         $data = $this->fetchAllAndClose($ps);
         return $data;
     }
@@ -196,7 +196,7 @@ class PDODAO  extends \thinkup\DispatchParent {
      * @return array numbered keys, with array named keys
      */
     protected final function getDataRowsAsArrays($ps){
-        $ps->setFetchMode(PDO::FETCH_ASSOC);
+        $ps->setFetchMode(\PDO::FETCH_ASSOC);
         $data = $this->fetchAllAndClose($ps);
         return $data;
     }
@@ -208,7 +208,7 @@ class PDODAO  extends \thinkup\DispatchParent {
      * @param int Count
      */
     protected final function getDataCountResult($ps){
-        $ps->setFetchMode(PDO::FETCH_ASSOC);
+        $ps->setFetchMode(\PDO::FETCH_ASSOC);
         $row = $this->fetchAndClose($ps);
         if(!$row or !isset($row['count'])){
             $count = 0;

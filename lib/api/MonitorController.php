@@ -72,6 +72,17 @@ class MonitorController extends \thinkup\api\CrawlDispatcherController {
                 }
             }
             $status_response['workers_wanted'] = $this->config('CONNECTED_WORKERS');
+            
+            // get crawl status info
+            $install_name = isset($_GET['install_name']) ? $_GET['install_name'] : false;
+            $stats_dao = new \thinkup\model\CrawlStatsDAO();
+            $crawl_status = $stats_dao->getCrawlStats($install_name);
+            $status_response['crawl_status'] = $crawl_status;
+
+            // get crawl data
+            $crawl_data = $stats_dao->getCrawlData($install_name);
+            $status_response['crawl_data'] = $crawl_data;
+
             return $status_response;
         }
 

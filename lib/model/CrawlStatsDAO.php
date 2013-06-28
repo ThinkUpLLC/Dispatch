@@ -74,7 +74,45 @@ class CrawlStatsDAO extends \thinkup\model\PDODAO {
         $stmt = $this->execute($sql, array('crawl_status_id' => $insertid, 'crawl_log' => $log ));
 
         return $insertid;
-
     }
 
+    /**
+     * get crawl stats
+     * @param String Optional install name
+     * @return Array - a hash of status data
+     */
+     public function getCrawlStats($install_name = false) {
+         $where = $install_name ? 'where install_name = :install_name AND ' : 'where ';
+         $sql = "select crawl_status, round(avg(crawl_time)) as average, max(crawl_time) as max, " .
+         "min(crawl_time) as min, count(id) as count from crawl_status " .
+         $where . 'crawl_start > date_sub(now(), INTERVAL 5 DAY) ' .
+         "group by crawl_status order by crawl_status";
+        $binds = array();
+        if($install_name) {
+            $binds[':install_name'] = $install_name;
+        }
+        $sth = $this->execute($sql, $binds);
+        $stats = $this->getDataRowsAsArrays($sth);
+        return $stats;
+     }
+
+     /**
+      * get crawl stats
+      * @param String Optional install name
+      * @return Array - a hash of crawl data - last 200 records
+      */
+      public function getCrawlData($install_name = false) {
+          $where = $install_name ? 'where install_name = :install_name ' : ' ';
+          $sql = "select id, install_name, crawl_status, crawl_time, crawl_start, crawl_finish " .
+          "from crawl_status " .
+          $where .
+          "order by id limit 200";
+         $binds = array();
+         if($install_name) {
+             $binds[':install_name'] = $install_name;
+         }
+         $sth = $this->execute($sql, $binds);
+         $stats = $this->getDataRowsAsArrays($sth);
+         return $stats;
+      }
 }

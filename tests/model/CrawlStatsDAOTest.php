@@ -2,6 +2,7 @@
 
 require_once dirname(__FILE__) . '/../../lib/DispatchParent.php';
 require_once dirname(__FILE__) . '/ModelTest.php';
+require_once dirname(__FILE__) . '/CrawlFixtureDataSet.php';
 
 class CrawlStatsDAOTest extends ModelTest
 {
@@ -150,5 +151,93 @@ class CrawlStatsDAOTest extends ModelTest
         $data = $stmt->fetch();
         $this->assertEquals($insertid, $data['crawl_status_id']);
         $this->assertEquals('this is a big fat log message, and stuff', $data['crawl_log']);
+        //sleep(1000);
     }
+
+    /**
+     * test fetching crawl stats
+     */
+    public function testGetCrawlStats() {
+        $stats_dao = new \thinkup\model\CrawlStatsDAO();
+        $stats = $stats_dao->getCrawlStats();
+        
+        $this->assertEquals(2, sizeof($stats));
+
+        $this->assertEquals(0, $stats[0]['crawl_status']);
+        $this->assertEquals(100, $stats[0]['average']);
+        $this->assertEquals(100, $stats[0]['max']);
+        $this->assertEquals(100, $stats[0]['min']);
+        $this->assertEquals(1, $stats[0]['count']);
+
+        $this->assertEquals(1, $stats[1]['crawl_status']);
+        $this->assertEquals(38, $stats[1]['average']);
+        $this->assertEquals(140, $stats[1]['max']);
+        $this->assertEquals(10, $stats[1]['min']);
+        $this->assertEquals(5, $stats[1]['count']);
+
+        // filter by install 'test 1'
+        $stats = $stats_dao->getCrawlStats('test 1');
+
+        $this->assertEquals(2, sizeof($stats));
+
+        $this->assertEquals(0, $stats[0]['crawl_status']);
+        $this->assertEquals(100, $stats[0]['average']);
+        $this->assertEquals(100, $stats[0]['max']);
+        $this->assertEquals(100, $stats[0]['min']);
+        $this->assertEquals(1, $stats[0]['count']);
+
+        $this->assertEquals(1, $stats[1]['crawl_status']);
+        $this->assertEquals(57, $stats[1]['average']);
+        $this->assertEquals(140, $stats[1]['max']);
+        $this->assertEquals(10, $stats[1]['min']);
+        $this->assertEquals(3, $stats[1]['count']);
+
+        // filter by install 'test 2'
+        $stats = $stats_dao->getCrawlStats('test 2');
+        $this->assertEquals(1, sizeof($stats));
+        $this->assertEquals(1, $stats[0]['crawl_status']);
+        $this->assertEquals(10, $stats[0]['average']);
+        $this->assertEquals(10, $stats[0]['max']);
+        $this->assertEquals(10, $stats[0]['min']);
+        $this->assertEquals(2, $stats[0]['count']);
+
+    }
+
+    /**
+     * test fetching crawl data
+     */
+    public function testGetCrawlData() {
+        $stats_dao = new \thinkup\model\CrawlStatsDAO();
+        $data = $stats_dao->getCrawlData();
+        $this->assertEquals(6, sizeof($data));
+        $this->assertEquals('test 1', $data[0]['install_name']);
+        $this->assertEquals(1, $data[0]['id']);
+        $this->assertEquals(1, $data[0]['crawl_status']);
+        $this->assertEquals(140, $data[0]['crawl_time']);
+        $this->assertEquals('test 2', $data[2]['install_name']);
+        $this->assertEquals(3, $data[2]['id']);
+
+        // for test 1 install
+        $data = $stats_dao->getCrawlData('test 1');
+        $this->assertEquals(4, sizeof($data));
+        $this->assertEquals('test 1', $data[0]['install_name']);
+        $this->assertEquals(1, $data[0]['id']);
+        $this->assertEquals(1, $data[0]['crawl_status']);
+        $this->assertEquals(140, $data[0]['crawl_time']);
+        $this->assertEquals('test 1', $data[2]['install_name']);
+        $this->assertEquals(4, $data[2]['id']);
+
+        // for test 2 install
+        $data = $stats_dao->getCrawlData('test 2');
+        $this->assertEquals(2, sizeof($data));
+        $this->assertEquals('test 2', $data[0]['install_name']);
+        $this->assertEquals(3, $data[0]['id']);
+        $this->assertEquals(1, $data[0]['crawl_status']);
+        $this->assertEquals(10, $data[0]['crawl_time']);
+        $this->assertEquals('test 2', $data[1]['install_name']);
+        $this->assertEquals(5, $data[1]['id']);
+    }
+
 }
+
+
