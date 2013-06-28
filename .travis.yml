@@ -15,4 +15,4 @@ before_install:
     - mysql -u root thinkup_crawl_manager < sql/setup.sql
 
 script:
-    - phpunit tests/
+    - ./bin/testrunner --tap tests/
