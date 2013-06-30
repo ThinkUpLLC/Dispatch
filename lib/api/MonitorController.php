@@ -58,6 +58,9 @@ class MonitorController extends \thinkup\api\CrawlDispatcherController {
             } else {
                 return array('status' => $workers_wanted . ' running worker(s) found - NOT OK');
             }
+        } else if(isset($_GET['log'])) {
+            $stats_dao = new \thinkup\model\CrawlStatsDAO();
+            return $stats_dao->getCrawlLog($_GET['log']);
         } else {
             $gearman_status = $this->getStatus();
             $status_response = array();

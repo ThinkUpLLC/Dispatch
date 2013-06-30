@@ -205,4 +205,32 @@ class MonitorControllerTest extends Modeltest
 
     }
 
+    public function testGetLogData() {
+        
+        // mock Queue Monitor getStatus()
+        $monitor = $this->getMock('\thinkup\queue\Monitor', array('getStatus'));        
+        $monitor->expects($this->any())
+                 ->method('getStatus')
+                 ->will($this->returnValue( MonitorData::getMonitorData() ));
+
+        $monitor_ctl = new thinkup\api\MonitorController($monitor);
+
+        $_GET['log'] = '1';
+        $json = $monitor_ctl->execute();
+        $this->assertNotNull($json);
+        $resonse_data = json_decode($json, true); 
+
+        $this->assertEquals(1, $resonse_data['id']);
+        $this->assertEquals(1, $resonse_data['crawl_status_id']);
+        $this->assertEquals('crawl log id 1', $resonse_data['crawl_log']);
+
+        $_GET['log'] = '-1'; // bad id
+        $json = $monitor_ctl->execute();
+        $this->assertNotNull($json);
+        $resonse_data = json_decode($json, true); 
+        $this->assertNull($resonse_data);
+
+   }
+
+
 }
