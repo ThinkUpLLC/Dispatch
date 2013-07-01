@@ -92,17 +92,28 @@ class CrawlDispatcherController extends \thinkup\DispatchParent {
      * @return String html or json body
      */
     public function execute() {
-        $auth_status = $this->auth();
-        $output = '';
-        if(isset($auth_status['error'])) {
-            $this->header('HTTP/1.0 401 Unauthorized');
-            $output = json_encode($auth_status);
-            LOG::get()->debug('Invalid Auth');
+        
+        // simple auth login with token
+        if(isset($_GET['login'])) {
+            if($_GET['login'] == $this->config('API_AUTH_TOKEN')) {
+                return json_encode(array('message' => 'Successful Login', 'auth_token' => $this->config('API_AUTH_TOKEN')));
+            } else {
+                $this->header('HTTP/1.0 401 Unauthorized');
+                return json_encode(array('message' => 'Login failed, bad token'));
+            }
         } else {
-            $obj = $this->auth_execute();
-            $output = json_encode($obj);
+            $auth_status = $this->auth();
+            $output = '';
+            if(isset($auth_status['error'])) {
+                $this->header('HTTP/1.0 401 Unauthorized');
+                $output = json_encode($auth_status);
+                LOG::get()->debug('Invalid Auth');
+            } else {
+                $obj = $this->auth_execute();
+                $output = json_encode($obj);
+            }
+            return $output;
         }
-        return $output;
     }
 
     /**

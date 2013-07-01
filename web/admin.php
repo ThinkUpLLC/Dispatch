@@ -1,18 +1,25 @@
-<!DOCTYPE html>
+<?php
+/* include DispatchParent */
+require_once substr(dirname(__FILE__), 0, -4) . '/lib/DispatchParent.php';
+\thinkup\DispatchParent::init();
+$web_path = \thinkup\DispatchParent::config('WEB_PATH');
+$root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_token='
+?><!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <title>Queue Status/Monitor</title>
 
-  <link rel="stylesheet" href="/css/styles.css" type="text/css">
+  <link rel="stylesheet" href="<?php echo $web_path ?>/css/styles.css" type="text/css">
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-  <script src="/lib/underscore-1.4.4.js"></script>
-  <script src="/lib/backbone-1.0.js"></script>
+  <script src="<?php echo $web_path ?>/lib/jquery.cookie.js"></script>
+  <script src="<?php echo $web_path ?>/lib/underscore-1.4.4.js"></script>
+  <script src="<?php echo $web_path ?>/lib/backbone-1.0.js"></script>
   
   <script type="text/javascript">
   // global vars
-  var root_url = '/monitor.php?auth_token=0000000000';
+  var root_url = '<?php echo $root_url ?>';
   </script>
 
 </head>
@@ -21,6 +28,10 @@
 <!-- ######################## -->
 <!-- html shell                   -->
 <!-- ######################## -->
+
+<!-- log view -->
+<div id="login-form"></div>
+
 
 <!-- queue status error element -->
 <div id="error-container"></div>
@@ -105,6 +116,13 @@
 <script type="text/template" id="log-template">
 <div id="close-log">X [esc]</div>
 <div id="view-log"><%= crawl_log %></div>
+</script>
+
+<!-- login template -->
+<script type="text/template" id="login-template">
+<form id="login">
+<div id="login-header">Dispatch Admin Dashboard</div><input type="text" id="token" /><input type="submit" value="login">
+</form>
 </script>
 
 </body>

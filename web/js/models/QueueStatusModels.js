@@ -23,3 +23,16 @@ CrawlLogModel = Backbone.Model.extend({
         })
     }
 });
+
+/**
+ * Login model
+ */
+CrawlLogModel = Backbone.Model.extend({
+    urlRoot: root_url,
+    initialize: function() {
+        this.bind("error", function(model, error) {
+            error_view = new ErrorView();
+            error_view.render();
+        })
+    }
+});

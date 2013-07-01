@@ -125,3 +125,17 @@ var CrawlLogView = Backbone.View.extend( {
         return this;
     }
 });
+
+/**
+ * View for dispatch queue errors (probably queue not running)
+ */
+var LoginView = Backbone.View.extend( {
+    el: $('#login-form'),
+    initialize: function() {
+        this.template = _.template($('#login-template').html(), {});
+    },
+    render: function() {
+        this.$el.html(this.template);
+        return this;
+    }
+});

@@ -43,4 +43,26 @@ class CrawlDispatcherController extends APIParentTest
         $obj = json_decode($json);
         $this->assertEquals($obj->message, 'This method should be overridden by a child class');
     }
+
+    public function testBadLogin() {
+        $ctl = $this->getMock('\thinkup\api\CrawlDispatcherController', array('header'));
+        $ctl->expects($this->any())
+                 ->method('header')
+                 ->with($this->equalTo('HTTP/1.0 401 Unauthorized'));
+
+        $_GET['login'] = 'bad login, what?';
+        $json = $ctl->execute();
+        $obj = json_decode($json);
+        $this->assertEquals($obj->message, 'Login failed, bad token');
+    }
+
+    public function testGoodLogin() {
+        $ctl = new \thinkup\api\CrawlDispatcherController();
+        $_GET['login'] = \thinkup\DispatchParent::config('API_AUTH_TOKEN');
+        $json = $ctl->execute();
+        $obj = json_decode($json);
+        $this->assertEquals($obj->message, 'Successful Login');
+        $this->assertEquals($obj->app_path, \thinkup\DispatchParent::config('API_AUTH_TOKEN'));
+    }
+
 }

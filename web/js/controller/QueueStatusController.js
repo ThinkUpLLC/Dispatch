@@ -26,16 +26,17 @@ var queue_status_fetch_object = {
             }
             $('#error-container').show();
         } else {
+            // render queue status
             workers = queue_status.get('gearman_status').operations.crawl.connectedWorkers;
             running = queue_status.get('gearman_status').operations.crawl.running;
-            // render queue status
             queue_ok_view = new QueueOKView();
             queue_ok_view.render(workers, running);
-            // render crawl statuses
-            crawl_states_view = new CrawlStatusesView();
-            crawl_states_view.render(queue_status.get('crawl_data'));
             $('#queue-status').show();
         }
+        // render crawl statuses
+        $('#crawl-statuses-form').show();
+        crawl_states_view = new CrawlStatusesView();
+        crawl_states_view.render(queue_status.get('crawl_data'));
     }
 };
 
@@ -52,18 +53,24 @@ var crawl_log_fetch_object = {
 
 $(document).ready(function() {
 
+    auth_token = $.cookie("auth_token");
     // fetch our initailqueue and cralw statuses
-    queue_status.fetch( queue_status_fetch_object );
+    if(! auth_token) {
+        login_view = new LoginView();
+        login_view.render();
+        $('#login-form').show();
+    } else {
+        queue_status.fetch( queue_status_fetch_object );
 
-    // event on form for filtering cralw statuses by install name
-    $('#install-filter').submit( function(ev) {
-        name = $('#install-name').val();
-        if(name && name != '') {
-            queue_status.urlRoot = root_url + '&install_name=' + name;
-            queue_status.fetch( queue_status_fetch_object );
-        }
-        return false;
-    });
-
+        // event on form for filtering cralw statuses by install name
+        $('#install-filter').submit( function(ev) {
+            name = $('#install-name').val();
+            if(name && name != '') {
+                queue_status.urlRoot = root_url + '&install_name=' + name;
+                queue_status.fetch( queue_status_fetch_object );
+            }
+            return false;
+        });
+    }
 });
 

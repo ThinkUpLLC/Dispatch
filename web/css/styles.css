@@ -90,3 +90,17 @@ table.gridtable td {
     float: right;
     width: 40px;
 }
+
+#crawl-statuses-form {
+    display: none;
+}
+
+#login-form {
+    border: solid black 1 px;
+    padding: 100px;
+    display: none;
+}
+#login-header {
+    font-size: 30px;
+    padding: 20px;
+}
