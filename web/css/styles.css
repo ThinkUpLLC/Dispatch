@@ -1,17 +1,70 @@
-a.plain:link
-{ color: #333; text-decoration: none }
-a.plain:active
-{ color: #333; text-decoration: none }
-a.plain:visited
-{ color: #333; text-decoration: none }
-a.plain:hover
-{ color: #333; text-decoration: none }
-
-.status-bar {
-    height: 60px;
+body {
+    font:18px 'Helvetica Neue',Arial,Heletica,sans-serif;
 }
 
-.about-icon {
-    float: left;
-    margin-right: 12px;
+/*crawl_status ul {
+    margin-left: 0;
+    padding-left: 0;
+    display: inline;
+    color: red;
+}
+
+crawl_status ul li {
+    margin-left: 0;
+    padding: 3px 15px;
+    border-left: 1px solid #000;
+    list-style: none;
+    display: inline;
+}
+
+crawl_status ul li.first {
+    margin-left: 0;
+    border-left: none;
+    list-style: none;
+    display: inline;
+}
+*/
+
+#install-filter {
+    margin: 20px 0px 20px 0px;
+    font-weight: bold;
+}
+
+table.gridtable {
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+
+.log {
+    display: none;
+    position: absolute;
+    width: 1024px;
+    height: 640px;
+    top: 5px;
+    left: 5px;
+    z-index: 2;
+    border: solid black 1px;
+    background-color: #fff;
+}
+
+#close-log {
+    font-size: 12px;
+    float: right;
+    width: 40px;
 }

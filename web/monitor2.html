@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>Queue Status/Monitor</title>
 
+  <link rel="stylesheet" href="/css/styles.css" type="text/css">
   <style type="text/css">
       .error { color: red}
   </style>
@@ -19,13 +20,28 @@
 </head>
 <body>
 
-  
+<!-- ######################## -->
+<!-- html shell                   -->
+<!-- ######################## -->
+
+<!-- queue status error element -->
 <div id="error-container"></div>
+<!-- queue status element -->
 <div id="queue-status"></div>
 
-<div id="crawl-statuses-form"><form id="install-filter">filter by install name<input id="install-name" type="text"></form></div>
+<!-- crawl status filter by install name form -->
+<div id="crawl-statuses-form"><form id="install-filter">Filter by install name: <input id="install-name" type="text"></form></div>
 
-<div id="crawl-statuses"></div>
+<!-- crawl statuses element -->
+<table class="gridtable" id="crawl-statuses"></table>
+
+<!-- log view -->
+<div class="log" id="log">!!</div>
+
+
+<!-- ######################## -->
+<!-- js                   -->
+<!-- ######################## -->
 
 <!-- our queue status views -->
 <script src="/js/views/QueueStatusViews.js" type="text/javascript"></script>
@@ -36,34 +52,61 @@
 <!-- our queue status models  -->
 <script src="/js/controller/QueueStatusController.js" type="text/javascript"></script>
 
-<!-- queue status templates -->
+
+<!-- ######################## -->
+<!-- templates                -->
+<!-- ######################## -->
+
+<!-- queue status error template -->
 <script type="text/template" id="request-fail">
     <span class="error">We are unable to process queue status request</span>
 </script>
 
+<!-- queue status not running -->
 <script type="text/template" id="queue-fail">
     <span class="error">The Dispatch Queue does not appear to be running</span>
 </script>
 
+<!-- queue status not enough workers template -->
 <script type="text/template" id="worker-fail">
     <span class="error">There are not enough Dispatch Workers running. Currently running '<%= running %>', and should be running '<%= wanted %>'</span>
 </script>
 
+<!-- queue status OK template -->
 <script type="text/template" id="queue-ok">
     <span>Queue Services are Up</span>
     <ul>
     <li>Connected Workers: <%= workers %></li>
     <li>Workers Running: <%= running %></li>
+    </ul>
 </script>
 
+<!-- crawl status table h=eader template -->
+<script type="text/template" id="crawl-status-header">
+    <th>Install Name                                 </th>
+    <th>ID                                           </th>
+    <th>Crawl Status                                 </th>
+    <th>Crawl Time In seconds                        </th>
+    <th>Start Time                                   </th>
+    <th>Finish Time                                  </th>
+    <th>Log                                          </th>
+</script>
+
+<!-- crawl status template -->
 <script type="text/template" id="crawl-status">
-    <span><%= install_name %></span>
-    <span><%= crawl_status %></span>
-    <span><%= crawl_time %></span>
-    <span><%= crawl_start %></span>
-    <span><%= crawl_finish %></span>
-    <span><%= crawl_finish %></span>
-    <span><a href="#<%= id %>" class="log-link">log</a></span>
+    <td><%= install_name %>                          </td>
+    <td><%= id %>                                    </td>
+    <td><%= crawl_status %>                          </td>
+    <td><%= crawl_time %>                            </td>
+    <td><%= crawl_start %>                           </td>
+    <td><%= crawl_finish %>                          </td>
+    <td><a href="#<%= id %>" class="log-link">log</a></td>
+</script>
+
+<!-- log template -->
+<script type="text/template" id="log-template">
+<div id="close-log">X [esc]</div>
+<div id="view-log">!<%= log %>!</div>
 </script>
 
 </body>
