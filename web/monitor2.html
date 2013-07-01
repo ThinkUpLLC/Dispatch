@@ -5,9 +5,7 @@
   <title>Queue Status/Monitor</title>
 
   <link rel="stylesheet" href="/css/styles.css" type="text/css">
-  <style type="text/css">
-      .error { color: red}
-  </style>
+
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
   <script src="/lib/underscore-1.4.4.js"></script>
   <script src="/lib/backbone-1.0.js"></script>
@@ -36,7 +34,7 @@
 <table class="gridtable" id="crawl-statuses"></table>
 
 <!-- log view -->
-<div class="log" id="log">!!</div>
+<div class="log" id="log"></div>
 
 
 <!-- ######################## -->
@@ -74,14 +72,14 @@
 
 <!-- queue status OK template -->
 <script type="text/template" id="queue-ok">
-    <span>Queue Services are Up</span>
+    <span id="services-header">Queue Services are Up</span>
     <ul>
     <li>Connected Workers: <%= workers %></li>
     <li>Workers Running: <%= running %></li>
     </ul>
 </script>
 
-<!-- crawl status table h=eader template -->
+<!-- crawl status table header template -->
 <script type="text/template" id="crawl-status-header">
     <th>Install Name                                 </th>
     <th>ID                                           </th>
@@ -106,7 +104,7 @@
 <!-- log template -->
 <script type="text/template" id="log-template">
 <div id="close-log">X [esc]</div>
-<div id="view-log">!<%= log %>!</div>
+<div id="view-log"><%= crawl_log %></div>
 </script>
 
 </body>

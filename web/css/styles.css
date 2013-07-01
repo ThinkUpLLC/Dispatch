@@ -24,6 +24,26 @@ crawl_status ul li.first {
     display: inline;
 }
 */
+#error-container {
+    color: #F53022;
+    border: solid #F53022 1px;
+    width: 600px;
+    padding: 10px;
+    font-weight: bold;
+    background-color: #FFFFC7;
+    display: none;
+}
+#queue-status {
+    padding: 10px;
+    display: none;
+    border: solid #0B6138 1px;
+    width: 300px;
+    background-color: #91E3A2;
+}
+#services-header {
+    font-weight: bold;
+    color: #0B6138;
+}
 
 #install-filter {
     margin: 20px 0px 20px 0px;
@@ -56,11 +76,13 @@ table.gridtable td {
     position: absolute;
     width: 1024px;
     height: 640px;
-    top: 5px;
-    left: 5px;
+    top: 20px;
+    left: 20px;
     z-index: 2;
     border: solid black 1px;
     background-color: #fff;
+    overflow:scroll;
+    padding: 20px;
 }
 
 #close-log {

@@ -5,7 +5,7 @@
 // out queue status model instance
 var queue_status = new QueueStatus();
 
-// our fetch object with success response
+// our fetch crawl status object with success response
 var queue_status_fetch_object = {
     success: function (queue_status) { 
         if(queue_status.get('gearman_ok') == false) {
@@ -24,6 +24,7 @@ var queue_status_fetch_object = {
                     worker_error_view.render(workers, queue_status.get('workers_wanted'));
                 }
             }
+            $('#error-container').show();
         } else {
             workers = queue_status.get('gearman_status').operations.crawl.connectedWorkers;
             running = queue_status.get('gearman_status').operations.crawl.running;
@@ -31,10 +32,21 @@ var queue_status_fetch_object = {
             queue_ok_view = new QueueOKView();
             queue_ok_view.render(workers, running);
             // render crawl statuses
-            console.log(queue_status.get('crawl_data'));
             crawl_states_view = new CrawlStatusesView();
             crawl_states_view.render(queue_status.get('crawl_data'));
+            $('#queue-status').show();
         }
+    }
+};
+
+// our fetch log object with success response
+var crawl_log_fetch_object = {
+    success: function (log) {
+        crawl_log_view = new CrawlLogView();
+        crawl_log_view.render(log);
+        newtop = $(document).scrollTop() + 20;
+        $('#log').css('top',newtop + 'px');
+
     }
 };
 

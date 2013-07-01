@@ -92,10 +92,10 @@ var CrawlStatusesView = Backbone.View.extend( {
 
          // event for log click
          $('.log-link').click( function(ev) {
-             $(this).attr('href');
-             crawl_log_view = new CrawlLogView();
-             crawl_log_view.render();             
-             $('#log').css('top',$(document).scrollTop() + 'px');
+             logid = $(this).attr('href').substring(1);;
+             crawl_log_model = new CrawlLogModel();
+             crawl_log_model.urlRoot = root_url + '&log=' + logid;
+             crawl_log_model.fetch( crawl_log_fetch_object );
              return false;
          });
 
@@ -119,7 +119,7 @@ var CrawlLogView = Backbone.View.extend( {
     render: function(log) {
         var self = this;
         self.$el.html('');
-        template = _.template($('#log-template').html(), {});
+        template = _.template($('#log-template').html(), {crawl_log: log.get('crawl_log')});
         this.$el.html(template);
         $('#log').show();
         return this;
