@@ -97,10 +97,21 @@ table.gridtable td {
 
 #login-form {
     border: solid black 1 px;
-    padding: 100px;
+    width: 400px;
+    padding: 20px 10px 20px 20px;
+    margin:0 auto;
+    margin-top: 100px;
     display: none;
+    text-align: center;
+    border: solid black 1px;
 }
 #login-header {
     font-size: 30px;
-    padding: 20px;
+    padding: 10px;
+}
+#invalid-login {
+    color: #F53022;
+    display: none;
+    padding-top: 20px;
+    font-weight: bold;
 }

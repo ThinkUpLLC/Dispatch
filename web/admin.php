@@ -19,7 +19,7 @@ $root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_tok
   
   <script type="text/javascript">
   // global vars
-  var root_url = '<?php echo $root_url ?>';
+  root_url = '<?php echo $root_url ?>';
   </script>
 
 </head>
@@ -35,6 +35,7 @@ $root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_tok
 
 <!-- queue status error element -->
 <div id="error-container"></div>
+
 <!-- queue status element -->
 <div id="queue-status"></div>
 
@@ -122,6 +123,7 @@ $root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_tok
 <script type="text/template" id="login-template">
 <form id="login">
 <div id="login-header">Dispatch Admin Dashboard</div><input type="text" id="token" /><input type="submit" value="login">
+<div id="invalid-login">Login Failed</div>
 </form>
 </script>
 

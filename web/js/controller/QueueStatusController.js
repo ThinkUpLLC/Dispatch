@@ -51,26 +51,52 @@ var crawl_log_fetch_object = {
     }
 };
 
+// our login object with success response
+var login_fetch_object = {
+    success: function (login) {
+        $('#login-form').hide();
+        auth_token = login.get('auth_token');
+        root_url += auth_token;
+        $.cookie('auth_token', token, { expires: 30 });
+        console.log(root_url);
+        queue_status.urlRoot = root_url;
+        queue_status.fetch( queue_status_fetch_object );
+    }
+}
+
 $(document).ready(function() {
 
     auth_token = $.cookie("auth_token");
     // fetch our initailqueue and cralw statuses
-    if(! auth_token) {
+    if(! auth_token || auth_token == '') {
         login_view = new LoginView();
         login_view.render();
         $('#login-form').show();
-    } else {
-        queue_status.fetch( queue_status_fetch_object );
-
-        // event on form for filtering cralw statuses by install name
-        $('#install-filter').submit( function(ev) {
-            name = $('#install-name').val();
-            if(name && name != '') {
-                queue_status.urlRoot = root_url + '&install_name=' + name;
-                queue_status.fetch( queue_status_fetch_object );
+        $('#login-form').submit( function(ev) {
+            login_token = $('#token').val();
+            if(login_token && login_token != '') {
+                login_model = new LoginModel();
+                login_model.urlRoot = root_url + '&login=' + login_token;
+                login_model.fetch(login_fetch_object);
             }
             return false;
         });
+        
+    } else {
+        root_url += auth_token;
+        queue_status.urlRoot = root_url;
+        queue_status.fetch( queue_status_fetch_object );
     }
+
+    // event on form for filtering cralw statuses by install name
+    $('#install-filter').submit( function(ev) {
+        name = $('#install-name').val();
+        if(name && name != '') {
+            queue_status.urlRoot = root_url + '&install_name=' + name;
+            queue_status.fetch( queue_status_fetch_object );
+        }
+        return false;
+    });
+
 });
 
