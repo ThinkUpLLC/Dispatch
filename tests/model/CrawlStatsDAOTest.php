@@ -163,34 +163,34 @@ class CrawlStatsDAOTest extends ModelTest
         
         $this->assertEquals(2, sizeof($stats));
 
-        $this->assertEquals(0, $stats[0]['crawl_status']);
-        $this->assertEquals(100, $stats[0]['average']);
-        $this->assertEquals(100, $stats[0]['max']);
-        $this->assertEquals(100, $stats[0]['min']);
-        $this->assertEquals(1, $stats[0]['count']);
+        $this->assertEquals(0, $stats[1]['crawl_status']);
+        $this->assertEquals(100, $stats[1]['average']);
+        $this->assertEquals(100, $stats[1]['max']);
+        $this->assertEquals(100, $stats[1]['min']);
+        $this->assertEquals(1, $stats[1]['count']);
 
-        $this->assertEquals(1, $stats[1]['crawl_status']);
-        $this->assertEquals(38, $stats[1]['average']);
-        $this->assertEquals(140, $stats[1]['max']);
-        $this->assertEquals(10, $stats[1]['min']);
-        $this->assertEquals(5, $stats[1]['count']);
+        $this->assertEquals(1, $stats[0]['crawl_status']);
+        $this->assertEquals(38, $stats[0]['average']);
+        $this->assertEquals(140, $stats[0]['max']);
+        $this->assertEquals(10, $stats[0]['min']);
+        $this->assertEquals(5, $stats[0]['count']);
 
         // filter by install 'test 1'
         $stats = $stats_dao->getCrawlStats('test 1');
 
         $this->assertEquals(2, sizeof($stats));
 
-        $this->assertEquals(0, $stats[0]['crawl_status']);
-        $this->assertEquals(100, $stats[0]['average']);
-        $this->assertEquals(100, $stats[0]['max']);
-        $this->assertEquals(100, $stats[0]['min']);
-        $this->assertEquals(1, $stats[0]['count']);
+        $this->assertEquals(0, $stats[1]['crawl_status']);
+        $this->assertEquals(100, $stats[1]['average']);
+        $this->assertEquals(100, $stats[1]['max']);
+        $this->assertEquals(100, $stats[1]['min']);
+        $this->assertEquals(1, $stats[1]['count']);
 
-        $this->assertEquals(1, $stats[1]['crawl_status']);
-        $this->assertEquals(57, $stats[1]['average']);
-        $this->assertEquals(140, $stats[1]['max']);
-        $this->assertEquals(10, $stats[1]['min']);
-        $this->assertEquals(3, $stats[1]['count']);
+        $this->assertEquals(1, $stats[0]['crawl_status']);
+        $this->assertEquals(57, $stats[0]['average']);
+        $this->assertEquals(140, $stats[0]['max']);
+        $this->assertEquals(10, $stats[0]['min']);
+        $this->assertEquals(3, $stats[0]['count']);
 
         // filter by install 'test 2'
         $stats = $stats_dao->getCrawlStats('test 2');

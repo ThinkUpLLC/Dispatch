@@ -62,7 +62,7 @@ class CrawlDispatcherController extends APIParentTest
         $json = $ctl->execute();
         $obj = json_decode($json);
         $this->assertEquals($obj->message, 'Successful Login');
-        $this->assertEquals($obj->app_path, \thinkup\DispatchParent::config('API_AUTH_TOKEN'));
+        $this->assertEquals($obj->auth_token, \thinkup\DispatchParent::config('API_AUTH_TOKEN'));
     }
 
 }

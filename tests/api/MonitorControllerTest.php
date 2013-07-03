@@ -116,8 +116,8 @@ class MonitorControllerTest extends Modeltest
         $this->assertNotNull($json);
         $resonse_data = json_decode($json, true); 
         $this->assertEquals(2, sizeof($resonse_data['crawl_status']));
-        $this->assertEquals(1, $resonse_data['crawl_status'][0]['count']);
-        $this->assertEquals(5, $resonse_data['crawl_status'][1]['count']);
+        $this->assertEquals(1, $resonse_data['crawl_status'][1]['count']);
+        $this->assertEquals(5, $resonse_data['crawl_status'][0]['count']);
 
         // filter by install name
         $_GET['install_name'] = 'test 1';
@@ -125,8 +125,8 @@ class MonitorControllerTest extends Modeltest
         $this->assertNotNull($json);
         $resonse_data = json_decode($json, true); 
         $this->assertEquals(2, sizeof($resonse_data['crawl_status']));
-        $this->assertEquals(1, $resonse_data['crawl_status'][0]['count']);
-        $this->assertEquals(3, $resonse_data['crawl_status'][1]['count']);
+        $this->assertEquals(1, $resonse_data['crawl_status'][1]['count']);
+        $this->assertEquals(3, $resonse_data['crawl_status'][0]['count']);
 
         $_GET['install_name'] = 'test 2';
         $json = $monitor_ctl->execute();
