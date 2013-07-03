@@ -116,8 +116,8 @@ class MonitorControllerTest extends Modeltest
         $this->assertNotNull($json);
         $resonse_data = json_decode($json, true); 
         $this->assertEquals(2, sizeof($resonse_data['crawl_status']));
-        $this->assertEquals(1, $resonse_data['crawl_status'][1]['count']);
-        $this->assertEquals(5, $resonse_data['crawl_status'][0]['count']);
+        $this->assertEquals(1, $resonse_data['crawl_status'][0]['count']);
+        $this->assertEquals(5, $resonse_data['crawl_status'][1]['count']);
 
         // filter by install name
         $_GET['install_name'] = 'test 1';
@@ -125,8 +125,8 @@ class MonitorControllerTest extends Modeltest
         $this->assertNotNull($json);
         $resonse_data = json_decode($json, true); 
         $this->assertEquals(2, sizeof($resonse_data['crawl_status']));
-        $this->assertEquals(1, $resonse_data['crawl_status'][1]['count']);
-        $this->assertEquals(3, $resonse_data['crawl_status'][0]['count']);
+        $this->assertEquals(1, $resonse_data['crawl_status'][0]['count']);
+        $this->assertEquals(3, $resonse_data['crawl_status'][1]['count']);
 
         $_GET['install_name'] = 'test 2';
         $json = $monitor_ctl->execute();
@@ -159,12 +159,12 @@ class MonitorControllerTest extends Modeltest
         $this->assertEquals(6, sizeof($resonse_data['crawl_data']));
         $data = $resonse_data['crawl_data'];
         $this->assertEquals(6, sizeof($data));
-        $this->assertEquals('test 1', $data[0]['install_name']);
-        $this->assertEquals(1, $data[0]['id']);
-        $this->assertEquals(1, $data[0]['crawl_status']);
-        $this->assertEquals(140, $data[0]['crawl_time']);
-        $this->assertEquals('test 2', $data[2]['install_name']);
-        $this->assertEquals(3, $data[2]['id']);
+        $this->assertEquals('test 1', $data[5]['install_name']);
+        $this->assertEquals(1, $data[5]['id']);
+        $this->assertEquals(1, $data[5]['crawl_status']);
+        $this->assertEquals(140, $data[5]['crawl_time']);
+        $this->assertEquals('test 2', $data[3]['install_name']);
+        $this->assertEquals(3, $data[3]['id']);
         
         // filter by install name
         $_GET['install_name'] = 'test 1';
@@ -172,14 +172,15 @@ class MonitorControllerTest extends Modeltest
         $json = $monitor_ctl->execute();
         $this->assertNotNull($json);
         $resonse_data = json_decode($json, true); 
+        #var_dump($resonse_data);
         $data = $resonse_data['crawl_data'];
         $this->assertEquals(4, sizeof($data));
-        $this->assertEquals('test 1', $data[0]['install_name']);
-        $this->assertEquals(1, $data[0]['id']);
-        $this->assertEquals(1, $data[0]['crawl_status']);
-        $this->assertEquals(140, $data[0]['crawl_time']);
-        $this->assertEquals('test 1', $data[2]['install_name']);
-        $this->assertEquals(4, $data[2]['id']);
+        $this->assertEquals('test 1', $data[3]['install_name']);
+        $this->assertEquals(1, $data[3]['id']);
+        $this->assertEquals(1, $data[3]['crawl_status']);
+        $this->assertEquals(140, $data[3]['crawl_time']);
+        $this->assertEquals('test 1', $data[3]['install_name']);
+        $this->assertEquals(1, $data[3]['id']);
 
         // for test 2 install
         $_GET['install_name'] = 'test 2';
@@ -188,12 +189,12 @@ class MonitorControllerTest extends Modeltest
         $resonse_data = json_decode($json, true); 
         $data = $resonse_data['crawl_data'];
         $this->assertEquals(2, sizeof($data));
-        $this->assertEquals('test 2', $data[0]['install_name']);
-        $this->assertEquals(3, $data[0]['id']);
-        $this->assertEquals(1, $data[0]['crawl_status']);
-        $this->assertEquals(10, $data[0]['crawl_time']);
         $this->assertEquals('test 2', $data[1]['install_name']);
-        $this->assertEquals(5, $data[1]['id']);
+        $this->assertEquals(3, $data[1]['id']);
+        $this->assertEquals(1, $data[1]['crawl_status']);
+        $this->assertEquals(10, $data[1]['crawl_time']);
+        $this->assertEquals('test 2', $data[0]['install_name']);
+        $this->assertEquals(5, $data[0]['id']);
 
         // for test 3 install bad install name
         $_GET['install_name'] = 'test 3';

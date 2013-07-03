@@ -85,6 +85,12 @@ table.gridtable td {
     padding: 20px;
 }
 
+#view-log-textarea {
+    margin-top: 20px;
+    width: 1000px;
+    height: 600px;    
+}
+
 #close-log {
     font-size: 12px;
     float: right;

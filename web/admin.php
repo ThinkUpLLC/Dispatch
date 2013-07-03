@@ -116,7 +116,8 @@ $root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_tok
 <!-- log template -->
 <script type="text/template" id="log-template">
 <div id="close-log">X [esc]</div>
-<div id="view-log"><%= crawl_log %></div>
+<div id="view-log">
+<textarea id="view-log-textarea"><%= crawl_log %></textarea></div>
 </script>
 
 <!-- login template -->

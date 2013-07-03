@@ -9,7 +9,7 @@ class Config {
         'WEB_PATH' => '', // no trailing slash please
         'API_AUTH_TOKEN' => 'tok',
         'GEARMAN_SERVERS' => '127.0.0.1:4730',
-        'THINKUP_INSTALL_DIR' => '/Users/mark/thinkupcrawl',
+        'THINKUP_INSTALL_DIR' => '/tmp',
         'PHP' => '/usr/bin/php',
         'CONNECTED_WORKERS' => 1,
         'db_host' => '127.0.0.1',

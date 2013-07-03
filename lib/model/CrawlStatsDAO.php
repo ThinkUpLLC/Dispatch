@@ -86,7 +86,7 @@ class CrawlStatsDAO extends \thinkup\model\PDODAO {
          $sql = "select crawl_status, round(avg(crawl_time)) as average, max(crawl_time) as max, " .
          "min(crawl_time) as min, count(id) as count from crawl_status " .
          $where . 'crawl_start > date_sub(now(), INTERVAL 5 DAY) ' .
-         "group by crawl_status order by crawl_status desc limit 100";
+         "group by crawl_status order by crawl_status";
         $binds = array();
         if($install_name) {
             $binds[':install_name'] = $install_name;
@@ -106,7 +106,7 @@ class CrawlStatsDAO extends \thinkup\model\PDODAO {
           $sql = "select id, install_name, crawl_status, crawl_time, crawl_start, crawl_finish " .
           "from crawl_status " .
           $where .
-          "order by id limit 200";
+          "order by id desc limit 200";
          $binds = array();
          if($install_name) {
              $binds[':install_name'] = $install_name;

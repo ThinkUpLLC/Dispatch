@@ -40,9 +40,9 @@ class Worker extends \thinkup\DispatchParent {
      */
     public function __construct() {
         $crawl_stats_dao = new \thinkup\model\CrawlStatsDAO();
-        $path = sprintf("%s%s", $crawl_stats_dao->config('THINKUP_INSTALL_DIR'), '/webapp/crawler/chameleon');
-        self::$chameleon_cmd = sprintf("cd %s; %s %s", $path, $crawl_stats_dao->config('PHP'), 'chameleoncrawl.php');
-
+        // $path = sprintf("%s%s", $crawl_stats_dao->config('THINKUP_INSTALL_DIR'), '/webapp/crawler/chameleon');
+        // self::$chameleon_cmd = sprintf("cd %s; %s %s", $path, $crawl_stats_dao->config('PHP'), 'chameleoncrawl.php');
+        self::$chameleon_cmd = sprintf("%s %s", $crawl_stats_dao->config('PHP'), 'chameleoncrawl.php');
     }
 
     /**
@@ -91,16 +91,23 @@ class Worker extends \thinkup\DispatchParent {
         \thinkup\queue\Client::validateJobList(array($job_object));
 
         $installation_name = $job_object['installation_name'];
-        $cmd = self::$chameleon_cmd . " '$workload'";        
-        LOG::get()->debug("Running command: $cmd");
+        $install_dir = $cmo->config('THINKUP_INSTALL_DIR');
+        if(isset($job_object['version'])) {
+            $install_dir .= $job_object['version'];
+        }
+        $path = sprintf("%s%s", $install_dir, '/webapp/crawler/chameleon');
+        $cmd = "cd $path;" . self::$chameleon_cmd . " '$workload'"; 
+        $cmd_repsone_array = self::executeCMD($cmd);
+        $out = $cmd_repsone_array[0];
+        $cmdout = $cmd_repsone_array[1];
+        $return_value = $cmd_repsone_array[2];
         $output = '';
-        $return_value = 0;
-        $cmdout = exec($cmd, $out, $return_value);
         if($return_value > 0) {
             $output = $cmd . ' Failed: ' . $return_value;
         } else {
+            $output .= "CMD: $cmd\n\n";
             foreach($out as $line) {
-                $output .= $line;
+                $output .= $line . "\n";
             }
         }
         $crawl_finish = time();
@@ -119,6 +126,13 @@ class Worker extends \thinkup\DispatchParent {
         LOG::get()->debug(sprintf("Crawl for installation '%s' completed in %s seconds", $job_object['installation_name'], $crawl_time) );
     }
 
+    public static function executeCMD($cmd) {       
+        LOG::get()->debug("Running command: $cmd");
+        $return_value = 0;
+        $out = '';
+        $cmdout = exec($cmd, $out, $return_value);
+        return array($out, $cmdout, $return_value);
+    }
 }
 
 

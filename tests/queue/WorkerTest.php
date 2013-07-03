@@ -78,6 +78,36 @@ class WorkerTest extends ModelTest
         $data = $stmt->fetch();
         $this->assertRegExp('/happy test/', $data['crawl_log']);
     }
+
+    public function testRunJobWithVersion() {
+        
+        $worker = $this->getMock('\thinkup\queue\Worker', array('executeCMD'));
+
+        $worker::staticExpects($this->any())
+                 ->method('executeCMD');
+                 //->with($this->equalTo('HTTP/1.0 401 Unauthorized'));
+                         
+        \thinkup\queue\Worker::$chameleon_cmd = "echo 'happy test'; echo";
+        $jobjson = '{"installation_name":"mwilkie","timezone":"America/Los_Angeles","db_host":"localhost","db_name":"thinkup_20120911","db_socket":"/tmp/mysql.sock","db_port":"","version":"1.0"}';
+
+        $worker::processJob(new MockJob('a_handle', $jobjson));
+
+        $stmt = \thinkup\model\CrawlStatsDAO::$PDO->query( "select id, install_name, " .
+        "crawl_time, unix_timestamp(crawl_start) as crawl_start, " .
+        "unix_timestamp(crawl_finish) as crawl_finish, crawl_status " .
+        "from crawl_status order by id desc");
+        $data = $stmt->fetch();
+        $this->assertEquals($data["install_name"], 'mwilkie');
+        $this->assertGreaterThanOrEqual(0, $data["crawl_time"]);
+        $almost_now = time() - 400;
+        $this->assertGreaterThan($almost_now, $data["crawl_start"]);
+        $this->assertGreaterThan($almost_now, $data["crawl_finish"]);
+        $this->assertGreaterThanOrEqual($data["crawl_time"], $data["crawl_finish"]);
+        $this->assertEquals(0, $data["crawl_status"]);
+        $stmt = \thinkup\model\CrawlStatsDAO::$PDO->query( "select * from crawl_log where crawl_status_id = " . $data['id']);
+        $data = $stmt->fetch();
+        $this->assertRegExp('/thinkupcrawl1.0/m', $data['crawl_log']);
+    }
 }
 
 class MockJob
