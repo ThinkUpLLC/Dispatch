@@ -56,9 +56,10 @@ var login_fetch_object = {
     success: function (login) {
         $('#login-form').hide();
         auth_token = login.get('auth_token');
+        //console.log(auth_token);
         root_url += auth_token;
-        $.cookie('auth_token', token, { expires: 30 });
-        console.log(root_url);
+        $.cookie('auth_token', auth_token, { expires: 30 });
+        //console.log(root_url);
         queue_status.urlRoot = root_url;
         queue_status.fetch( queue_status_fetch_object );
     }
