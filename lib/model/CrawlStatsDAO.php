@@ -85,7 +85,7 @@ class CrawlStatsDAO extends \thinkup\model\PDODAO {
          $where = $install_name ? 'where install_name = :install_name AND ' : 'where ';
          $sql = "select crawl_status, round(avg(crawl_time)) as average, max(crawl_time) as max, " .
          "min(crawl_time) as min, count(id) as count from crawl_status " .
-         $where . 'crawl_start > date_sub(now(), INTERVAL 5 DAY) ' .
+         $where . 'crawl_start > date_sub(now(), INTERVAL 1 DAY) ' .
          "group by crawl_status order by crawl_status";
         $binds = array();
         if($install_name) {

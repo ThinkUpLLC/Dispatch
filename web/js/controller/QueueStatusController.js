@@ -33,10 +33,14 @@ var queue_status_fetch_object = {
             queue_ok_view.render(workers, running);
             $('#queue-status').show();
         }
+        // render crawl stats
+        crawl_stats_view = new CrawlStatsView();
+        crawl_stats_view.render(queue_status.get('crawl_status'));
+
         // render crawl statuses
         $('#crawl-statuses-form').show();
-        crawl_states_view = new CrawlStatusesView();
-        crawl_states_view.render(queue_status.get('crawl_data'));
+        crawl_status_view = new CrawlStatusesView();
+        crawl_status_view.render(queue_status.get('crawl_data'));
     }
 };
 
@@ -56,10 +60,8 @@ var login_fetch_object = {
     success: function (login) {
         $('#login-form').hide();
         auth_token = login.get('auth_token');
-        //console.log(auth_token);
         root_url += auth_token;
         $.cookie('auth_token', auth_token, { expires: 30 });
-        //console.log(root_url);
         queue_status.urlRoot = root_url;
         queue_status.fetch( queue_status_fetch_object );
     }
@@ -92,10 +94,13 @@ $(document).ready(function() {
     // event on form for filtering cralw statuses by install name
     $('#install-filter').submit( function(ev) {
         name = $('#install-name').val();
-        if(name && name != '') {
-            queue_status.urlRoot = root_url + '&install_name=' + name;
-            queue_status.fetch( queue_status_fetch_object );
-        }
+        queue_status.urlRoot = root_url + '&install_name=' + name;
+        queue_status.fetch( queue_status_fetch_object );
+        $('#all-button').show();
+        $('#all-button').click( function(ev) {
+            $('#install-name').val('');
+            $('#install-filter').submit();
+        });
         return false;
     });
 

@@ -37,8 +37,20 @@ crawl_status ul li.first {
     padding: 10px;
     display: none;
     border: solid #0B6138 1px;
-    width: 300px;
+    width: 600px;
     background-color: #91E3A2;
+}
+#crawl-stats {
+    padding: 10px;
+    xdisplay: none;
+    border: solid #0B6138 1px;
+    width: 600px;
+    margin: 10px 0px 0px 0px;
+    font-size: 15px;
+    xbackground-color: #91E3A2;
+}
+.crawl_stat_status {
+    font-weight: bold;
 }
 #services-header {
     font-weight: bold;
@@ -68,9 +80,15 @@ table.gridtable td {
 	padding: 8px;
 	border-style: solid;
 	border-color: #666666;
-	background-color: #ffffff;
 }
-
+.crawl-status-Successful {
+    color: green;
+    background-color: #CEF6CE;
+}
+.crawl-status-Failed {
+    color: red;
+    background-color: #F6CECE;
+}
 .log {
     display: none;
     position: absolute;
@@ -120,4 +138,8 @@ table.gridtable td {
     display: none;
     padding-top: 20px;
     font-weight: bold;
+}
+
+.align-right {
+    text-align: right;
 }

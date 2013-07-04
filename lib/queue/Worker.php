@@ -55,7 +55,8 @@ class Worker extends \thinkup\DispatchParent {
          * Worker function to register for GearmanWorker
          */
         function workerCrawl($job) {
-            \thinkup\queue\Worker::processJob($job);
+            $worker = new \thinkup\queue\Worker();
+            $worker->processJob($job);
         }
 
         $worker= new \GearmanWorker();
@@ -77,7 +78,7 @@ class Worker extends \thinkup\DispatchParent {
      * Processes a gearman crawl job
      * @param Job a Gearman Job to process
      */
-    public static function processJob($job) {
+    public function processJob($job) {
         $crawl_start = time();
         $cmo = new \thinkup\model\CrawlStatsDAO();
         
@@ -97,7 +98,7 @@ class Worker extends \thinkup\DispatchParent {
         }
         $path = sprintf("%s%s", $install_dir, '/webapp/crawler/chameleon');
         $cmd = "cd $path;" . self::$chameleon_cmd . " '$workload'"; 
-        $cmd_repsone_array = self::executeCMD($cmd);
+        $cmd_repsone_array = $this->executeCMD($cmd);
         $out = $cmd_repsone_array[0];
         $cmdout = $cmd_repsone_array[1];
         $return_value = $cmd_repsone_array[2];
@@ -107,8 +108,17 @@ class Worker extends \thinkup\DispatchParent {
         } else {
             $output .= "CMD: $cmd\n\n";
             foreach($out as $line) {
+                // we should not get html back for a crawl
+                if(preg_match('/DOCTYPE\s+html/', $line)) {
+                    $return_value = 256; // html
+                    LOG::get()->error("crawl returned html");
+                }
                 $output .= $line . "\n";
             }
+        }
+        $output .= "Return status: $return_value";
+        if($return_value > 0) {
+            $return_value = 1;
         }
         $crawl_finish = time();
         $crawl_time = $crawl_finish - $crawl_start;
@@ -126,7 +136,7 @@ class Worker extends \thinkup\DispatchParent {
         LOG::get()->debug(sprintf("Crawl for installation '%s' completed in %s seconds", $job_object['installation_name'], $crawl_time) );
     }
 
-    public static function executeCMD($cmd) {       
+    public function executeCMD($cmd) {
         LOG::get()->debug("Running command: $cmd");
         $return_value = 0;
         $out = '';

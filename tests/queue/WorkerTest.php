@@ -34,7 +34,13 @@ class WorkerTest extends ModelTest
     }
 
     public function testRunJobFail() {
-        $worker = new \thinkup\queue\Worker();
+
+        $worker = $this->getMock('\thinkup\queue\Worker', array('executeCMD'));
+
+        $worker->expects($this->once())
+                 ->method('executeCMD')
+                 ->will( $this->returnValue(array(array('a line of output'), 1, 1)) );
+                 
         \thinkup\queue\Worker::$chameleon_cmd = "cat ";
         $jobjson = '{"installation_name":"mwilkie","timezone":"America/Los_Angeles","db_host":"localhost","db_name":"thinkup_20120911","db_socket":"/tmp/mysql.sock","db_port":""}';
         $worker->processJob(new MockJob('a_handle', $jobjson));
@@ -57,7 +63,13 @@ class WorkerTest extends ModelTest
     }
 
     public function testRunJob() {
-        $worker = new \thinkup\queue\Worker();
+
+        $worker = $this->getMock('\thinkup\queue\Worker', array('executeCMD'));
+
+        $worker->expects($this->once())
+                 ->method('executeCMD')
+                 ->will( $this->returnValue(array(array('a line of output'), 0, 0)) );
+
         \thinkup\queue\Worker::$chameleon_cmd = "echo 'happy test'; echo";
         $jobjson = '{"installation_name":"mwilkie","timezone":"America/Los_Angeles","db_host":"localhost","db_name":"thinkup_20120911","db_socket":"/tmp/mysql.sock","db_port":""}';
         $worker->processJob(new MockJob('a_handle', $jobjson));
@@ -83,15 +95,14 @@ class WorkerTest extends ModelTest
         
         $worker = $this->getMock('\thinkup\queue\Worker', array('executeCMD'));
 
-        $worker::staticExpects($this->any())
-                 ->method('executeCMD');
-                 //->with($this->equalTo('HTTP/1.0 401 Unauthorized'));
+        $worker->expects($this->once())
+                 ->method('executeCMD')
+                 ->will( $this->returnValue(array(array('a line of output'), 0, 0)) );
                          
-        \thinkup\queue\Worker::$chameleon_cmd = "echo 'happy test'; echo";
         $jobjson = '{"installation_name":"mwilkie","timezone":"America/Los_Angeles","db_host":"localhost","db_name":"thinkup_20120911","db_socket":"/tmp/mysql.sock","db_port":"","version":"1.0"}';
 
-        $worker::processJob(new MockJob('a_handle', $jobjson));
-
+        $worker->processJob(new MockJob('a_handle', $jobjson));
+        
         $stmt = \thinkup\model\CrawlStatsDAO::$PDO->query( "select id, install_name, " .
         "crawl_time, unix_timestamp(crawl_start) as crawl_start, " .
         "unix_timestamp(crawl_finish) as crawl_finish, crawl_status " .
@@ -106,7 +117,8 @@ class WorkerTest extends ModelTest
         $this->assertEquals(0, $data["crawl_status"]);
         $stmt = \thinkup\model\CrawlStatsDAO::$PDO->query( "select * from crawl_log where crawl_status_id = " . $data['id']);
         $data = $stmt->fetch();
-        $this->assertRegExp('/thinkupcrawl1.0/m', $data['crawl_log']);
+        $this->assertRegExp('/cd.*1.0/m', $data['crawl_log']);
+        $this->assertRegExp('/a line of output/m', $data['crawl_log']);
     }
 }
 

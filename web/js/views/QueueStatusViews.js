@@ -45,7 +45,6 @@ var WorkerErrorView = Backbone.View.extend( {
 var QueueOKView = Backbone.View.extend( {
     el: $('#queue-status'),
     render: function(workers, running) {
-        //console.log(workers);
         template = _.template($('#queue-ok').html(), {running: running, workers: workers});
         this.$el.html(template);
         return this;
@@ -58,7 +57,6 @@ var QueueOKView = Backbone.View.extend( {
 var CrawlStatusHeader = Backbone.View.extend( {
     tagName: 'tr',
     render: function() {
-        //console.log(workers);
         template = _.template($('#crawl-status-header').html(), {});
         this.$el.html(template);
         return this;
@@ -87,6 +85,7 @@ var CrawlStatusesView = Backbone.View.extend( {
         self.$el.html('');
         self.$el.append((new CrawlStatusHeader()).render().$el);
         _.each(craw_statuses, function(crawl_status, i) {
+             crawl_status.crawl_status = crawl_status.crawl_status == 0 ? 'Successful' : 'Failed';
              self.$el.append((new CrawlStatus()).render(crawl_status).$el);
          });
 
@@ -127,7 +126,7 @@ var CrawlLogView = Backbone.View.extend( {
 });
 
 /**
- * View for dispatch queue errors (probably queue not running)
+ * Login View
  */
 var LoginView = Backbone.View.extend( {
     el: $('#login-form'),
@@ -136,6 +135,36 @@ var LoginView = Backbone.View.extend( {
     },
     render: function() {
         this.$el.html(this.template);
+        return this;
+    }
+});
+
+/**
+ * View for crawl stats
+ */
+var CrawlStatsView = Backbone.View.extend( {
+    el: $('#crawl-stats'),
+    render: function(stats) {
+        var self = this;
+        self.$el.html('');
+        _.each(stats, function(stat, i) {
+             self.$el.append((new CrawlStatView()).render(stat).$el);
+         });
+        $('#crawl-stats').show();
+    }
+});
+
+/**
+ * View for crawl stat
+ */
+var CrawlStatView = Backbone.View.extend( {
+    tagName: 'div',
+    render: function(stat) {
+        var self = this;
+        self.$el.html('');
+        stat.crawl_status = stat.crawl_status == 1 ? 'Failed' : 'Successful';
+        template = _.template($('#crawl-stats-temnplate').html(), stat);
+        this.$el.html(template);
         return this;
     }
 });

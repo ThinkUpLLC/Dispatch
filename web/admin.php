@@ -39,8 +39,16 @@ $root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_tok
 <!-- queue status element -->
 <div id="queue-status"></div>
 
+<!-- crawl status element -->
+<div id="crawl-stats"  title="In the past 24 hours"></div>
+
 <!-- crawl status filter by install name form -->
-<div id="crawl-statuses-form"><form id="install-filter">Filter by install name: <input id="install-name" type="text"></form></div>
+<div id="crawl-statuses-form">
+    <form id="install-filter">Filter by install name: <input id="install-name" type="text">
+        <input type="submit" value="filter" />
+        <input type="button" value="all installs" style="display: none;" id="all-button" />
+    </form>
+</div>
 
 <!-- crawl statuses element -->
 <table class="gridtable" id="crawl-statuses"></table>
@@ -84,30 +92,38 @@ $root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_tok
 
 <!-- queue status OK template -->
 <script type="text/template" id="queue-ok">
-    <span id="services-header">Queue Services are Up</span>
-    <ul>
-    <li>Connected Workers: <%= workers %></li>
-    <li>Workers Running: <%= running %></li>
-    </ul>
+    <span id="services-header">Queue Services are Up</span>:
+    Connected Workers: <%= workers %>
+    Workers Running: <%= running %>
+</script>
+
+<!-- crawl stats template -->
+<script type="text/template" id="crawl-stats-temnplate">
+<span class="crawl_stat_status"><%= crawl_status %>:</span>
+crawls <%= count %>,
+average runtime <%= average %>,
+min runtime <%= min %>,
+max runtime <%= max %>
 </script>
 
 <!-- crawl status table header template -->
 <script type="text/template" id="crawl-status-header">
+    <th>Crawl Status                                 </th>
     <th>Install Name                                 </th>
     <th>ID                                           </th>
-    <th>Crawl Status                                 </th>
-    <th>Crawl Time In seconds                        </th>
-    <th>Start Time                                   </th>
+    <th>Crawl Time                                   </th>
+    <th>                    Start Time               </th>
     <th>Finish Time                                  </th>
     <th>Log                                          </th>
 </script>
 
 <!-- crawl status template -->
 <script type="text/template" id="crawl-status">
+<td class="crawl-status-<%= crawl_status %>">
+        <%= crawl_status %>                          </td>
     <td><%= install_name %>                          </td>
     <td><%= id %>                                    </td>
-    <td><%= crawl_status %>                          </td>
-    <td><%= crawl_time %>                            </td>
+    <td class="align-right"><%= crawl_time %>        </td>
     <td><%= crawl_start %>                           </td>
     <td><%= crawl_finish %>                          </td>
     <td><a href="#<%= id %>" class="log-link">log</a></td>
