@@ -54,13 +54,13 @@ $root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_tok
 <!-- ######################## -->
 
 <!-- our queue status views -->
-<script src="/js/views/QueueStatusViews.js" type="text/javascript"></script>
+<script src="<?php echo $web_path ?>/js/views/QueueStatusViews.js" type="text/javascript"></script>
 
 <!-- our queue status models  -->
-<script src="/js/models/QueueStatusModels.js" type="text/javascript"></script>
+<script src="<?php echo $web_path ?>/js/models/QueueStatusModels.js" type="text/javascript"></script>
 
 <!-- our queue status models  -->
-<script src="/js/controller/QueueStatusController.js" type="text/javascript"></script>
+<script src="<?php echo $web_path ?>/js/controller/QueueStatusController.js" type="text/javascript"></script>
 
 
 <!-- ######################## -->
