@@ -29,7 +29,7 @@ class JobQueueControllerTest extends APIParentTest
         $_POST['jobs'] = 'this is bad json}';
         $json = $ctl->execute();
         $obj = json_decode($json);
-        $this->assertEquals($obj->message, "Invalid request: Crawl jobs is not a valid list");
+        $this->assertEquals($obj->message, "Invalid request: JSON Error: Syntax error due to malformed JSON");
     }
 
     public function testBadJsonRequest() {

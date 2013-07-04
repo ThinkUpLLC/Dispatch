@@ -59,7 +59,13 @@ class JobQueueController extends \thinkup\api\CrawlDispatcherController {
             return $this->header_status(400, "Invalid request: no job queue data in request");
         } else {
             $jobs_json = isset($_POST['jobs']) ? $_POST['jobs'] : $_GET['jobs'];
-            $obj_array = json_decode($jobs_json, true);
+            try {
+                $obj_array = \thinkup\util\JSONDecoder::decode($jobs_json, true);
+            } catch(\thinkup\exceptions\JSONDecoderException $e) {
+                $message = "Invalid request: " . $e->getMessage();
+                LOG::get()->debug($message);
+                return $this->header_status(400, $message);                
+            }
             try {
                 $queue_client = new \thinkup\queue\Client($this->queue);
                 $cnt = $queue_client->queueCrawlJobs($obj_array);
