@@ -16,6 +16,7 @@ class Config {
         'db_user' => 'root',
         'db_password' => '',
         'db_name' => 'thinkup_crawl_manager',
+        'ALERT_EMAILS' => 'mwilkie@gmail.com,mark@bitterpill.org'
     );
 
     function _construct() {
