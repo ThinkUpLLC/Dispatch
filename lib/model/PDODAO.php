@@ -58,6 +58,17 @@ class PDODAO  extends \thinkup\DispatchParent {
                 $this->config('db_password')
             );
             self::$PDO->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+            $timezone = $this->config('TIMEZONE');
+            if($timezone) {
+                $time = new \DateTime("now", new \DateTimeZone($timezone) );
+                $tz_offset = $time->format('P');
+                try {
+                    self::$PDO->exec("SET time_zone = '$tz_offset'");
+                } catch (\PDOException $e) {
+                    error_log(print_r($e, true));
+                }
+            }
         }
     }
 

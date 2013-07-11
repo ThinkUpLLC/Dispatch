@@ -3,7 +3,7 @@
 require_once substr(dirname(__FILE__), 0, -4) . '/lib/DispatchParent.php';
 \thinkup\DispatchParent::init();
 $web_path = \thinkup\DispatchParent::config('WEB_PATH');
-$root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_token='
+$root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_token=';
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -108,25 +108,20 @@ max runtime <%= max %>
 
 <!-- crawl status table header template -->
 <script type="text/template" id="crawl-status-header">
-    <th>Crawl Status                                 </th>
     <th>Install Name                                 </th>
-    <th>ID                                           </th>
     <th>Crawl Time                                   </th>
-    <th>                    Start Time               </th>
-    <th>Finish Time                                  </th>
-    <th>Log                                          </th>
+    <th>Start Time                                   </th>
 </script>
 
 <!-- crawl status template -->
 <script type="text/template" id="crawl-status">
-<td class="crawl-status-<%= crawl_status %>">
-        <%= crawl_status %>                          </td>
-    <td><%= install_name %>                          </td>
-    <td><%= id %>                                    </td>
-    <td class="align-right"><%= crawl_time %>        </td>
-    <td><%= crawl_start %>                           </td>
-    <td><%= crawl_finish %>                          </td>
-    <td><a href="#<%= id %>" class="log-link">log</a></td>
+    <td class="align-right crawl-status-<%= crawl_status %>">
+    <%= install_name %>                                          </td>
+    <td class="align-right crawl-status-<%= crawl_status %>">
+    <a href="#<%= id %>" class="log-link">
+    <%= crawl_time %></a>                                        </td>
+    <td class="align-right crawl-status-<%= crawl_status %>">
+    <%= crawl_start %>                                           </td>
 </script>
 
 <!-- log template -->

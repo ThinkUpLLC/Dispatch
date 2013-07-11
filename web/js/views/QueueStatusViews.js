@@ -147,6 +147,9 @@ var CrawlStatsView = Backbone.View.extend( {
     render: function(stats) {
         var self = this;
         self.$el.html('');
+        if(stats.length == 0) {
+            return;
+        }
         _.each(stats, function(stat, i) {
              self.$el.append((new CrawlStatView()).render(stat).$el);
          });
