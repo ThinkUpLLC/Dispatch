@@ -116,12 +116,12 @@ max runtime <%= max %>
 <!-- crawl status template -->
 <script type="text/template" id="crawl-status">
     <td class="align-right crawl-status-<%= crawl_status %>">
-    <%= install_name %>                                          </td>
+    <a href="https://thinkup.com/user/<%= install_name %>"><%= install_name %></a>  </td>
     <td class="align-right crawl-status-<%= crawl_status %>">
     <a href="#<%= id %>" class="log-link">
-    <%= crawl_time %></a>                                        </td>
+    <%= crawl_time %></a>                                                          </td>
     <td class="align-right crawl-status-<%= crawl_status %>">
-    <%= crawl_start %>                                           </td>
+    <%= crawl_start %>                                                             </td>
 </script>
 
 <!-- log template -->
