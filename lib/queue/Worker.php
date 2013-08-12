@@ -96,7 +96,7 @@ class Worker extends \thinkup\DispatchParent {
         if(isset($job_object['version'])) {
             $install_dir .= $job_object['version'];
         }
-        $path = sprintf("%s%s", $install_dir, '/webapp/crawler/chameleon');
+        $path = sprintf("%s%s", $install_dir, '/webapp/crawler/thinkupllc-chameleon-crawler');
         $cmd = "cd $path;" . self::$chameleon_cmd . " '$workload'"; 
         $cmd_repsone_array = $this->executeCMD($cmd);
         $out = $cmd_repsone_array[0];
