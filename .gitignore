@@ -1,3 +1,4 @@
 .DS_Store
 Config.php
 logger-config.php
+.htaccess
