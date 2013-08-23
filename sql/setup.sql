@@ -10,7 +10,7 @@ create table crawl_status(
 	KEY install_name_key(install_name),
 	KEY crawl_time_key(crawl_time),
 KEY crawl_status_key(crawl_status)
-) ENGINE=InnoDB;
+) ENGINE=MyISAM;
 
 drop table if exists crawl_log;
 create table crawl_log(
@@ -19,4 +19,4 @@ create table crawl_log(
 	crawl_log LONGTEXT NOT NULL,
 	PRIMARY KEY (id),
 	KEY crawl_status_id_key (crawl_status_id)
-) ENGINE=InnoDB;
+) ENGINE=MyISAM;
