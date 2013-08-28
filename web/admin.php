@@ -16,7 +16,7 @@ $root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_tok
   <script src="<?php echo $web_path ?>/lib/jquery.cookie.js"></script>
   <script src="<?php echo $web_path ?>/lib/underscore-1.4.4.js"></script>
   <script src="<?php echo $web_path ?>/lib/backbone-1.0.js"></script>
-  
+
   <script type="text/javascript">
   // global vars
   root_url = '<?php echo $root_url ?>';
@@ -116,7 +116,7 @@ max runtime <%= max %>
 <!-- crawl status template -->
 <script type="text/template" id="crawl-status">
     <td class="align-right crawl-status-<%= crawl_status %>">
-    <a href="https://thinkup.com/user/<%= install_name %>"><%= install_name %></a>  </td>
+    <a href="https://<%= install_name %>.thinkup.com/"><%= install_name %></a>  </td>
     <td class="align-right crawl-status-<%= crawl_status %>">
     <a href="#<%= id %>" class="log-link">
     <%= crawl_time %></a>                                                          </td>
