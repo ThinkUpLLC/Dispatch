@@ -4,6 +4,7 @@ require_once substr(dirname(__FILE__), 0, -4) . '/lib/DispatchParent.php';
 \thinkup\DispatchParent::init();
 $web_path = \thinkup\DispatchParent::config('WEB_PATH');
 $root_url = \thinkup\DispatchParent::config('WEB_PATH') . '/monitor.php?auth_token=';
+$user_installation_path = \thinkup\DispatchParent::config('USER_INSTALLATION_PATH');
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -116,7 +117,7 @@ max runtime <%= max %>
 <!-- crawl status template -->
 <script type="text/template" id="crawl-status">
     <td class="align-right crawl-status-<%= crawl_status %>">
-    <a href="https://<%= install_name %>.thinkup.com/"><%= install_name %></a>  </td>
+    <a href="<?php echo $user_installation_path ?>"><%= install_name %></a>  </td>
     <td class="align-right crawl-status-<%= crawl_status %>">
     <a href="#<%= id %>" class="log-link">
     <%= crawl_time %></a>                                                          </td>

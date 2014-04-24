@@ -17,7 +17,8 @@ class Config {
         'db_password' => '',
         'db_name' => 'thinkup_crawl_manager',
         'ALERT_EMAILS' => 'mwilkie@gmail.com,mark@bitterpill.org',
-        'TIMEZONE' => 'America/New_York'
+        'TIMEZONE' => 'America/New_York',
+        'USER_INSTALLATION_PATH' => 'https://<%= install_name %>.thinkup.com/user/'
     );
 
     function _construct() {
