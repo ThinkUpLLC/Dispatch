@@ -115,6 +115,12 @@ class Worker extends \thinkup\DispatchParent {
                 }
                 $output .= $line . "\n";
             }
+
+            // If there's a PDO exception, return a failure status
+            if(preg_match('/PDOException/', $line)) {
+                $return_value = 256; // PDO Exception
+                LOG::get()->error("crawl returned pdo exception");
+            }
         }
         $output .= "Return status: $return_value";
         if($return_value > 0) {
