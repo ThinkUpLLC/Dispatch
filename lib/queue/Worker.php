@@ -19,7 +19,7 @@
  *
  *
  *  Queue Worker abstraction
- * 
+ *
  * LICENSE:
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2013 Mark Wilkie
@@ -32,7 +32,7 @@ namespace thinkup\queue;
 use \thinkup\util\Logger as LOG;
 
 class Worker extends \thinkup\DispatchParent {
-    
+
     static $chameleon_cmd = '';
 
     /**
@@ -81,7 +81,7 @@ class Worker extends \thinkup\DispatchParent {
     public function processJob($job) {
         $crawl_start = time();
         $cmo = new \thinkup\model\CrawlStatsDAO();
-        
+
         $workload = $job->workload();
         LOG::get()->debug("Received job: " . $job->handle() );
         LOG::get()->debug("Workload: $workload");
@@ -97,7 +97,7 @@ class Worker extends \thinkup\DispatchParent {
             $install_dir .= $job_object['version'];
         }
         $path = sprintf("%s%s", $install_dir, '/webapp/crawler/thinkupllc-chameleon-crawler');
-        $cmd = "cd $path;" . self::$chameleon_cmd . " '$workload'"; 
+        $cmd = "cd $path;" . self::$chameleon_cmd . " '$workload'";
         $cmd_repsone_array = $this->executeCMD($cmd);
         $out = $cmd_repsone_array[0];
         $cmdout = $cmd_repsone_array[1];
@@ -120,6 +120,11 @@ class Worker extends \thinkup\DispatchParent {
             if(preg_match('/PDOException/', $line)) {
                 $return_value = 256; // PDO Exception
                 LOG::get()->error("crawl returned pdo exception");
+            }
+            // If there's an InsightFieldNotSet exception, return a failure status
+            if(preg_match('/InsightFieldNotSetException/', $line)) {
+                $return_value = 256; // InsightFieldNotSetException
+                LOG::get()->error("crawl returned InsightFieldNotSetException");
             }
         }
         $output .= "Return status: $return_value";
