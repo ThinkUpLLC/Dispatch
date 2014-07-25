@@ -117,14 +117,9 @@ class Worker extends \thinkup\DispatchParent {
             }
 
             // If there's a PDO exception, return a failure status
-            if(preg_match('/PDOException/', $line)) {
-                $return_value = 256; // PDO Exception
-                LOG::get()->error("crawl returned pdo exception");
-            }
-            // If there's an InsightFieldNotSet exception, return a failure status
-            if(preg_match('/InsightFieldNotSetException/', $line)) {
-                $return_value = 256; // InsightFieldNotSetException
-                LOG::get()->error("crawl returned InsightFieldNotSetException");
+            if (preg_match('/Exception/', $line)) {
+                $return_value = 256; // Exception
+                LOG::get()->error("An exception was thrown during crawl");
             }
         }
         $output .= "Return status: $return_value";
