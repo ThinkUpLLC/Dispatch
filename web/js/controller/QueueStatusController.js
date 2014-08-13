@@ -104,5 +104,13 @@ $(document).ready(function() {
         return false;
     });
 
+    // event on form for filtering cralw statuses by failure status
+    $('#failed-filter').submit( function(ev) {
+        queue_status.urlRoot = root_url + '&failed_crawls=true';
+        queue_status.fetch( queue_status_fetch_object );
+        return false;
+    });
+
+
 });
 

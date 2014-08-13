@@ -116,6 +116,20 @@ class CrawlStatsDAO extends \thinkup\model\PDODAO {
          return $stats;
       }
 
+     /**
+      * Get failed crawls
+      * @return Array - a hash of crawl data - last 200 records
+      */
+      public function getFailedCrawlData() {
+          $sql = "select id, install_name, crawl_status, crawl_time, crawl_start, crawl_finish " .
+          "from crawl_status WHERE crawl_status > 0 order by id desc limit 200";
+         $sth = $this->execute($sql);
+         $stats = $this->getDataRowsAsArrays($sth);
+         return $stats;
+      }
+
+
+
       /**
        * get crawl stats
        * @param String Optional install name

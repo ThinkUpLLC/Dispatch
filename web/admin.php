@@ -45,10 +45,14 @@ $user_installation_path = \thinkup\DispatchParent::config('USER_INSTALLATION_PAT
 
 <!-- crawl status filter by install name form -->
 <div id="crawl-statuses-form">
-    <form id="install-filter">Filter by install name: <input id="install-name" type="text">
+    <form id="install-filter">Install name: <input id="install-name" type="text">
         <input type="submit" value="filter" />
         <input type="button" value="all installs" style="display: none;" id="all-button" />
     </form>
+    <form id="failed-filter">
+        <input type="submit" value="failed" />
+    </form>
+
 </div>
 
 <!-- crawl statuses element -->

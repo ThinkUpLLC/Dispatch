@@ -83,7 +83,13 @@ class MonitorController extends \thinkup\api\CrawlDispatcherController {
             $status_response['crawl_status'] = $crawl_status;
 
             // get crawl data
-            $crawl_data = $stats_dao->getCrawlData($install_name);
+            $failed_crawls = isset($_GET['failed_crawls']);
+            if ($failed_crawls) {
+                $crawl_data = $stats_dao->getFailedCrawlData();
+            } else {
+                $crawl_data = $stats_dao->getCrawlData($install_name);
+            }
+//            $crawl_data = $stats_dao->getCrawlData($install_name);
             $status_response['crawl_data'] = $crawl_data;
 
             return $status_response;
