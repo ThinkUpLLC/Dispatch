@@ -11,7 +11,7 @@ class ModelTest extends PHPUnit_Extensions_Database_TestCase
     public function getConnection() {
         $this->dao = new \thinkup\model\PDODAO();
         $this->dao->connect();
-        return $this->createDefaultDBConnection( \thinkup\model\PDODAO::$PDO );        
+        return $this->createDefaultDBConnection( \thinkup\model\PDODAO::$PDO );
     }
 
     public static function setUpBeforeClass()
@@ -19,7 +19,7 @@ class ModelTest extends PHPUnit_Extensions_Database_TestCase
         $cmo = new \thinkup\DispatchParent();
         $config = new \thinkup\config\Config();
         $test_dbname = $cmo->config('db_name') . '_test';
-        $dbname = $cmo->config('db_name');        
+        $dbname = $cmo->config('db_name');
         $crawl_stats_dao = new \thinkup\model\CrawlStatsDAO();
         $crawl_stats_dao->connect();
         $crawl_stats_dao->execute("drop database if exists $test_dbname");
@@ -32,7 +32,7 @@ class ModelTest extends PHPUnit_Extensions_Database_TestCase
         $crawl_stats_dao->disconnect();
     }
 
-    
+
     public function setUp()
     {
         $this->dao = new \thinkup\model\PDODAO();
@@ -65,11 +65,11 @@ class ModelTest extends PHPUnit_Extensions_Database_TestCase
     public function getDataSet() {
 
         $date_10_ago = date( 'Y-m-d H:i:s', time() - 10 );
-        $date_20_ago = date( 'Y-m-d H:i:s', time() - 20 ); 
-        $date_30_ago = date( 'Y-m-d H:i:s', time() - 30 ); 
-        $date_40_ago = date( 'Y-m-d H:i:s', time() - 40 ); 
-        $date_50_ago = date( 'Y-m-d H:i:s', time() - 60 ); 
-        $date_60_ago = date( 'Y-m-d H:i:s', time() - 60 ); 
+        $date_20_ago = date( 'Y-m-d H:i:s', time() - 20 );
+        $date_30_ago = date( 'Y-m-d H:i:s', time() - 30 );
+        $date_40_ago = date( 'Y-m-d H:i:s', time() - 40 );
+        $date_50_ago = date( 'Y-m-d H:i:s', time() - 60 );
+        $date_60_ago = date( 'Y-m-d H:i:s', time() - 60 );
         $date_160_ago = date( 'Y-m-d H:i:s', time() - 160 );
         $date_300_ago = date( 'Y-m-d H:i:s', time() - 300 );
 

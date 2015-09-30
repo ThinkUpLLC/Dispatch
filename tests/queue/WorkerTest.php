@@ -40,7 +40,7 @@ class WorkerTest extends ModelTest
         $worker->expects($this->once())
                  ->method('executeCMD')
                  ->will( $this->returnValue(array(array('a line of output'), 1, 1)) );
-                 
+
         \thinkup\queue\Worker::$chameleon_cmd = "cat ";
         $jobjson = '{"installation_name":"mwilkie","timezone":"America/Los_Angeles","db_host":"localhost","db_name":"thinkup_20120911","db_socket":"/tmp/mysql.sock","db_port":""}';
         $worker->processJob(new MockJob('a_handle', $jobjson));
@@ -92,17 +92,17 @@ class WorkerTest extends ModelTest
     }
 
     public function testRunJobWithVersion() {
-        
+
         $worker = $this->getMock('\thinkup\queue\Worker', array('executeCMD'));
 
         $worker->expects($this->once())
                  ->method('executeCMD')
                  ->will( $this->returnValue(array(array('a line of output'), 0, 0)) );
-                         
+
         $jobjson = '{"installation_name":"mwilkie","timezone":"America/Los_Angeles","db_host":"localhost","db_name":"thinkup_20120911","db_socket":"/tmp/mysql.sock","db_port":"","version":"1.0"}';
 
         $worker->processJob(new MockJob('a_handle', $jobjson));
-        
+
         $stmt = \thinkup\model\CrawlStatsDAO::$PDO->query( "select id, install_name, " .
         "crawl_time, unix_timestamp(crawl_start) as crawl_start, " .
         "unix_timestamp(crawl_finish) as crawl_finish, crawl_status " .
