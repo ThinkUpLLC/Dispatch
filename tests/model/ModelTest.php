@@ -38,6 +38,7 @@ class ModelTest extends PHPUnit_Extensions_Database_TestCase
         $this->dao = new \thinkup\model\PDODAO();
         $this->dao->connect();
         $this->truncateTables();
+        date_default_timezone_set('America/New_York');
         parent::setUp();
     }
 
