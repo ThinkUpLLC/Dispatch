@@ -123,6 +123,10 @@ class Worker extends \thinkup\DispatchParent {
             }
         }
         $output .= "Return status: $return_value";
+
+        //Ping Upstart and append the results of that call to the crawl log
+        $output .= $this->pingUpstart($job_object['installation_name']);
+
         if($return_value > 0) {
             $return_value = 1;
         }
@@ -140,6 +144,56 @@ class Worker extends \thinkup\DispatchParent {
             'crawl_status' => $return_value
         ));
         LOG::get()->debug(sprintf("Crawl for installation '%s' completed in %s seconds", $job_object['installation_name'], $crawl_time) );
+    }
+
+    /**
+     * Let Upstart know this installation's crawl has completed.
+     * Set to public for testing purposes.
+     * @param str $thinkup_username
+     * @return str Undecoded JSON response
+     */
+    public function pingUpstart($thinkup_username) {
+        $upstart_endpoint = $this->config('thinkupllc_api_endpoint').'member/completecrawl.php';
+        $upstart_username = $this->config('thinkupllc_api_endpoint_username');
+        $upstart_password = $this->config('thinkupllc_api_endpoint_password');
+
+        if (!isset($upstart_endpoint) || !isset($upstart_username) || !isset($upstart_password)) {
+            return null;
+        } else {
+            $params = array('u'=>$thinkup_username);
+            $query = http_build_query($params);
+            $api_call = $upstart_endpoint.'?'.$query;
+            //echo $api_call;
+            $contents = self::getURLContents($api_call, $upstart_username, $upstart_password);
+            return $contents;
+        }
+    }
+
+    /**
+     * Get the contents of a URL given an http auth username and password.
+     * @param  str $url
+     * @param  str $username
+     * @param  str $password
+     * @return str
+     */
+    private static function getURLContents($url, $username=null, $password=null) {
+        $c = curl_init();
+        curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($c, CURLOPT_URL, $url);
+        if (isset($username) && isset($password)) {
+            curl_setopt($c, CURLOPT_USERPWD, $username . ":" . $password);
+        }
+        $contents = curl_exec($c);
+        $status = curl_getinfo($c, CURLINFO_HTTP_CODE);
+        curl_close($c);
+
+        // echo $contents;
+        // echo "STATUS: ".$status."\n";
+        if (isset($contents)) {
+            return $contents;
+        } else {
+            return null;
+        }
     }
 
     public function executeCMD($cmd) {

@@ -18,7 +18,10 @@ class Config {
         'db_name' => 'thinkup_crawl_manager',
         'ALERT_EMAILS' => 'mwilkie@gmail.com,mark@bitterpill.org',
         'TIMEZONE' => 'America/New_York',
-        'USER_INSTALLATION_PATH' => 'https://<%= install_name %>.thinkup.com/user/'
+        'USER_INSTALLATION_PATH' => 'https://<%= install_name %>.thinkup.com/user/',
+        'thinkupllc_api_endpoint' => 'https://www.thinkup.com/join/api/',
+        'thinkupllc_api_endpoint_username' => 'user',
+        'thinkupllc_api_endpoint_password' => 'pass'
     );
 
     function _construct() {

@@ -120,6 +120,13 @@ class WorkerTest extends ModelTest
         $this->assertRegExp('/cd.*1.0/m', $data['crawl_log']);
         $this->assertRegExp('/a line of output/m', $data['crawl_log']);
     }
+
+    // This test hits the live endpoint, so commenting it out
+    // public function testPingUpstart() {
+    //     $worker = new \thinkup\queue\Worker();
+    //     $results = $worker->pingUpstart('ginatrapani');
+    //     $this->assertRegExp('/success/', $results);
+    // }
 }
 
 class MockJob
