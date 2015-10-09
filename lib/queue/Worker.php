@@ -35,6 +35,8 @@ class Worker extends \thinkup\DispatchParent {
 
     static $chameleon_cmd = '';
 
+    static $MAX_LOG_CHARS = 32000;
+
     /**
      * @return thinkup\queue\Worker
      */
@@ -135,15 +137,23 @@ class Worker extends \thinkup\DispatchParent {
 
         $crawl_stats_dao = new \thinkup\model\CrawlStatsDAO();
 
-        $insertid = $crawl_stats_dao->saveStatus(array(
-            'install_name' => $job_object['installation_name'],
-            'crawl_time' => $crawl_time,
-            'crawl_start' => $crawl_start,
-            'crawl_finish' => $crawl_finish,
-            'log' => $output,
-            'crawl_status' => $return_value
-        ));
-        LOG::get()->debug(sprintf("Crawl for installation '%s' completed in %s seconds", $job_object['installation_name'], $crawl_time) );
+        if (strlen($output) > self::$MAX_LOG_CHARS) {
+            $output = substr($output, (strlen($output) - self::$MAX_LOG_CHARS));
+        }
+        try {
+            $insertid = $crawl_stats_dao->saveStatus(array(
+                'install_name' => $job_object['installation_name'],
+                'crawl_time' => $crawl_time,
+                'crawl_start' => $crawl_start,
+                'crawl_finish' => $crawl_finish,
+                'log' => $output,
+                'crawl_status' => $return_value
+            ));
+        } catch (thinkup\exceptions\DBException $e) {
+            LOG::get()->error("An exception was thrown during crawl stats insertion: ". $e->getMessage());
+        }
+        LOG::get()->debug(sprintf("Crawl for installation '%s' completed in %s seconds",
+            $job_object['installation_name'], $crawl_time) );
     }
 
     /**
